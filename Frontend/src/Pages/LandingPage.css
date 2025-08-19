@@ -1,0 +1,79 @@
+/* Import a classic and highly readable font */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+/* Main container setup */
+.landing-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa; /* A very light, soft gray (off-white) */
+    font-family: 'Lato', sans-serif; /* A classic, professional font */
+    color: #212529; /* A dark charcoal for text, easier to read than pure black */
+}
+
+/* The content box for a clean, centered layout */
+.landing-page-content {
+    text-align: center;
+    max-width: 750px; /* A wider content area for a more spacious feel */
+    padding: 40px;
+    animation: fadeIn 1.2s ease-in-out; /* A simple and subtle fade-in animation */
+}
+
+/* Styling for the main headline */
+.landing-page-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700; /* Bold and authoritative */
+    margin-bottom: 1.5rem;
+}
+
+/* Styling for the descriptive paragraph */
+.landing-page-content p {
+    font-size: 1.2rem;
+    color: #495057; /* A softer dark gray for the sub-text */
+    margin-bottom: 3rem; /* More space before the button */
+    line-height: 1.6;
+}
+
+/* A more traditional, rectangular button */
+.get-started-button {
+    background-color: #343a40; /* A strong, dark gray for the button */
+    color: #ffffff;
+    border: 2px solid #343a40; /* Matching border */
+    border-radius: 6px; /* Slightly rounded corners, more corporate */
+    padding: 16px 40px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    /* Smooth transition for hover effects */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* A subtle "outline" hover effect */
+.get-started-button:hover {
+    background-color: transparent; /* Becomes transparent on hover */
+    color: #343a40; /* Text color changes to match the border */
+}
+
+/* Simplified fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .landing-page-content h1 {
+        font-size: 2.5rem;
+    }
+    .landing-page-content p {
+        font-size: 1.1rem;
+    }
+}

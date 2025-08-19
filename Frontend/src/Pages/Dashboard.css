@@ -1,0 +1,359 @@
+/* ==========================================================================
+   1. Global Styles & Variables (Visible Layered Theme)
+   ========================================================================== */
+
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --content-bg: #f1f5f9;
+    /* A distinct off-white/light gray background */
+    --card-bg: #ffffff;
+    /* Pure white for cards & sidebar to make them pop */
+    --hover-bg: #e2e8f0;
+    --text-primary: #000000;
+    --text-secondary: #555555;
+    --text-on-primary: #ffffff;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --border-radius: 0.5rem;
+    --transition-speed: 200ms;
+}
+
+/* Basic reset and font setup */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #cac6c6;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ==========================================================================
+   2. Main Layout
+   ========================================================================== */
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    /* background-color: #000000; */
+}
+
+/* ==========================================================================
+   3. Sidebar
+   ========================================================================== */
+
+.sidebar {
+    width: 260px;
+    background-color: var(--card-bg);
+    /* Changed to pure white */
+    color: var(--text-primary);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    transition: width var(--transition-speed) ease-in-out;
+}
+
+.sidebar-header .logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    background-color: var(--content-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: border-color var(--transition-speed);
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.sidebar-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+.nav-link:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+}
+
+.nav-link svg {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.nav-text {
+    flex-grow: 1;
+}
+
+.nav-count {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.1rem 0.4rem;
+    border-radius: 50px;
+}
+
+/* ==========================================================================
+   4. Main Content
+   ========================================================================== */
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    /* padding: 2rem; */
+    background-color: #e8e6e6;
+    /* Changed to off-white */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: var(--card-bg);
+    height: 4.5rem;
+        /* padding: 0 2rem; */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+       
+        margin-bottom: 2rem;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-left: 1rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header-actions a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color var(--transition-speed);
+    margin-right: 1rem;
+}
+
+.header-actions a:hover {
+    color: var(--primary-color);
+}
+
+.header-actions button {
+    background-color: var(--text-primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+}
+
+.header-actions button:hover {
+    background-color: #333;
+}
+
+/* ==========================================================================
+   5. Content Sections & Cards
+   ========================================================================== */
+
+.hero-section {
+    background: var(--text-primary);
+    color: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+    opacity: 0.9;
+}
+
+.hero-section button {
+    background-color: #ffffff;
+    color: var(--text-primary);
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.hero-section button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.info-card,
+.data-table-card {
+    background-color: var(--card-bg);
+    /* Changed to pure white */
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.info-card img {
+    width: 80px;
+    height: 80px;
+}
+
+.info-card h3,
+.data-table-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.info-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.data-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table-card td {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table-card tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table-card td:first-child {
+    color: var(--text-secondary);
+}
+
+.data-table-card td:last-child {
+    font-weight: 600;
+    text-align: right;
+    font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   6. Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 1rem;
+        justify-content: space-between;
+    }
+
+    .sidebar-header .logo {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .sidebar-nav,
+    .search-container {
+        display: none;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}

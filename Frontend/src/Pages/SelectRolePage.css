@@ -1,0 +1,83 @@
+/* Import the same fonts from the landing page for consistency */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Main page container - centers all content vertically and horizontally */
+.role-selection-container {
+    display: flex;
+    flex-direction: column; /* Stack title and cards vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff;
+    padding: 20px;
+    animation: fadeIn 1s ease-out; /* Same fade-in as the landing page */
+}
+
+/* Page title - uses the same elegant serif font as the landing page h1 */
+.role-selection-container h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #000000;
+    margin-bottom: 4rem; /* Generous space between title and cards */
+}
+
+/* Wrapper for the cards - uses flexbox to align them in a row */
+.roles-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+    justify-content: center;
+    gap: 2rem; /* Space between the cards */
+}
+
+/* Styling for each individual role card */
+.role-card {
+    width: 220px; /* Fixed width for each card */
+    height: 220px; /* Fixed height to make them square */
+    border: 2px solid #000000;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s ease; /* Smooth transition for all properties */
+    border-radius: 0; /* Sharp corners for consistency */
+}
+
+/* Text inside the card */
+.role-card p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+    margin: 0;
+    transition: color 0.4s ease; /* Animate color change separately */
+}
+
+/* Hover effect - invert colors and lift the card slightly */
+.role-card:hover {
+    background-color: #000000;
+    transform: translateY(-10px); /* Lifts the card up */
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.15); /* Adds a subtle shadow when lifted */
+}
+
+/* On hover, the text inside the card must turn white */
+.role-card:hover p {
+    color: #ffffff;
+}
+
+/* Remove the default blue color and underline from React Router's Link */
+.roles-wrapper a {
+    text-decoration: none;
+}
+
+/* A simple fade-in animation for page load */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
