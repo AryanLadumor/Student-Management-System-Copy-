@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import Teacher from '../models/teacher.model.js';
-import httpStatus from "http-status"
+
 
 // REGISTER TEACHER
 export const teacherRegister = async (req, res) => {
@@ -126,7 +126,7 @@ export const updateTeacherTeaches = async (req, res) => {
   }
 };
 
-const deleteTeacher = async (req, res) => {
+export const deleteTeacher = async (req, res) => {
     try {
         const { teacherId } = req.params;
         const deletedTeacher = await Teacher.findByIdAndDelete(teacherId);
@@ -138,8 +138,6 @@ const deleteTeacher = async (req, res) => {
         res.status(500).json({ message: "Server error", error: err.message });
     }
 };
-
-// Add this function to Backend/controllers/teacher.controller.js
 
 export const updateTeacher = async (req, res) => {
   try {
@@ -162,5 +160,3 @@ export const updateTeacher = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: err });
   }
 };
-
-export { deleteTeacher };

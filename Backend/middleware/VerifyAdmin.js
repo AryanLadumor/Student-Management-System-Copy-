@@ -10,6 +10,7 @@ const verifyAdmin = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
+        console.log(decoded)
         // CRITICAL: Check if the role is 'Admin'
         if (decoded.role !== 'Admin') {
             return res.status(403).json({ msg: "Access denied. User is not an admin." });

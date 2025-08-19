@@ -20,7 +20,7 @@ router.route("/login").post( loginStudent);
 //Get Specific Student By Id
 router.route("/:id").get( getStudentById);
 //Get Students By Inistitue
-router.route("/institute/:id/").get( getAllStudents);
+router.route("/institute/:id/").get(verifyAdmin , getAllStudents);
 
 // Attendance and Exam Results
 router.route("/:studentId/attendance").post(verifyAdmin, markAttendance);

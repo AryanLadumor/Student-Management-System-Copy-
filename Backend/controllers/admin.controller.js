@@ -46,7 +46,7 @@ const adminRegister = async (req, res) => {
     const result = await admin.save();
 
     const token = jwt.sign(
-      { id: admin._id, role: "admin",name:admin.name,email:admin.email,institutename:admin.institutename },
+      { id: admin._id, role: "Admin",name:admin.name,email:admin.email,institutename:admin.institutename },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
     );
@@ -97,7 +97,7 @@ const adminLogin = async (req, res) => {
     }
 
    const token = jwt.sign(
-            { id: admin._id, role: 'admin',name:admin.name,email:admin.email,institutename:admin.institutename },
+            { _id: admin._id, role: 'Admin' ,name:admin.name,email:admin.email,institutename:admin.institutename },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
         );

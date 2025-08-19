@@ -45,13 +45,14 @@ const loginStudent = async (req, res) => {
 
     // Step 1: Find the admin (institute) by name
     const admin = await Admin.findOne({ institutename });
-
     if (!admin) {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Institute not found" });
     }
-
+    console.log(admin._id)
     // Step 2: Find the student under this institute
     const student = await Student.findOne({ rollnumber, admin: admin._id });
+    console.log(student)
+    
 
     if (!student) {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Student not found under this institute" });
