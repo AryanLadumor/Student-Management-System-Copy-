@@ -17,7 +17,7 @@ export default function SelectRolePage() {
                     <p>Teacher</p>
                 </div>
             </Link>
-            <Link to='/HOD'>
+            <Link to='/admin/register'>
                 <div className="role-card">
                     <p>HOD</p>
                 </div>

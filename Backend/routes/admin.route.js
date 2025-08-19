@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 //---> Getting, updating, and deleting a specific Admin By Id
 router.route("/:id")
-  .get(verifyAdmin, adminDetails) 
+  .get(verifyAdmin, adminDetails)
   .put(verifyAdmin, updateAdmin)
   .delete(verifyAdmin, deleteAdmin);
 

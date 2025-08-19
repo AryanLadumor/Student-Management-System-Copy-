@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import httpStatus from "http-status"
+import httpStatus from "http-status";
+import jwt from "jsonwebtoken"; // <-- Import JWT
 
 import Student from "../models/student.model.js";
 import Admin from "../models/admin.model.js";
@@ -43,34 +44,34 @@ const loginStudent = async (req, res) => {
       return res.status(httpStatus.BAD_REQUEST).json({ msg: "All fields are required" });
     }
 
-    // Step 1: Find the admin (institute) by name
     const admin = await Admin.findOne({ institutename });
     if (!admin) {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Institute not found" });
     }
-    console.log(admin._id)
-    // Step 2: Find the student under this institute
-    const student = await Student.findOne({ rollnumber, admin: admin._id });
-    console.log(student)
-    
 
+    const student = await Student.findOne({ rollnumber, admin: admin._id });
     if (!student) {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Student not found under this institute" });
     }
 
-    // Step 3: Compare password
     const isMatch = await bcrypt.compare(password, student.password);
-
     if (!isMatch) {
       return res.status(httpStatus.UNAUTHORIZED).json({ msg: "Invalid password" });
     }
 
-    // Step 4: Return student info (excluding password)
+    // Create JWT Token
+    const token = jwt.sign(
+      { id: student._id, role: student.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
     const studentData = student.toObject();
     delete studentData.password;
 
     return res.status(httpStatus.OK).json({
       msg: "Login successful",
+      token, // <-- Send token in response
       student: studentData,
     });
 

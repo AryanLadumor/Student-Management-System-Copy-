@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken"; // <-- Import JWT
 import Teacher from '../models/teacher.model.js';
 
 
@@ -52,8 +53,21 @@ export const teacherLogIn = async (req, res) => {
     const isValid = await bcrypt.compare(password, teacher.password);
     if (!isValid) return res.status(400).json({ message: 'Invalid password' });
 
-    teacher.password = undefined;
-    res.json(teacher);
+    // Create JWT Token
+    const token = jwt.sign(
+      { id: teacher._id, role: teacher.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    const teacherData = teacher.toObject();
+    delete teacherData.password;
+
+    res.json({
+      msg: "Login successful",
+      token, // <-- Send token in response
+      teacher: teacherData
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server Error', error: err });
   }
