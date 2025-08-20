@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/api';
 import './View.css';
-import './Modal.css'; // Import modal styles
+import './Modal.css';
 
 const ViewSubjects = () => {
     const [subjects, setSubjects] = useState([]);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-
-    // State for modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentSubject, setCurrentSubject] = useState(null);
-    const [updatedData, setUpdatedData] = useState({ subjectname: '', subjectcode: '', sessions: '', classname: '' });
-    const [allClasses, setAllClasses] = useState([]);
+    // --- UPDATE STARTS HERE ---
+    // Removed 'classname' from the state
+    const [updatedData, setUpdatedData] = useState({ subjectname: '', subjectcode: '', sessions: '' });
+    // --- UPDATE ENDS HERE ---
 
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const adminId = adminData ? adminData.id : null;
@@ -24,21 +24,17 @@ const ViewSubjects = () => {
             return;
         }
 
-        const fetchData = async () => {
+        const fetchSubjects = async () => {
             try {
-                const [subjectsRes, classesRes] = await Promise.all([
-                    api.get(`/subjects/admin/${adminId}`),
-                    api.get(`/class/${adminId}`)
-                ]);
+                const subjectsRes = await api.get(`/subjects/admin/${adminId}`);
                 setSubjects(subjectsRes.data);
-                setAllClasses(classesRes.data);
             } catch (err) {
                 setError('Failed to fetch data.');
                 console.error("Error fetching data:", err);
             }
         };
 
-        fetchData();
+        fetchSubjects();
     }, [adminId]);
 
     const handleDelete = async (subjectId) => {
@@ -52,15 +48,16 @@ const ViewSubjects = () => {
         }
     };
 
-    // --- NEW FUNCTIONS FOR MODAL ---
     const handleEditClick = (subject) => {
         setCurrentSubject(subject);
+        // --- UPDATE STARTS HERE ---
+        // Removed 'classname' from the data being set
         setUpdatedData({
             subjectname: subject.subjectname,
             subjectcode: subject.subjectcode,
             sessions: subject.sessions,
-            classname: subject.classname?._id || ''
         });
+        // --- UPDATE ENDS HERE ---
         setIsModalOpen(true);
     };
 
@@ -78,7 +75,7 @@ const ViewSubjects = () => {
         e.preventDefault();
         try {
             const response = await api.put(`/subjects/${currentSubject._id}`, updatedData);
-            setSubjects(subjects.map(s => 
+            setSubjects(subjects.map(s =>
                 s._id === currentSubject._id ? response.data.subject : s
             ));
             handleModalClose();
@@ -95,13 +92,12 @@ const ViewSubjects = () => {
 
     return (
         <div className="view-container">
-            {/* Header and search bar remain the same */}
             <div className="view-header">
                 <h1>Manage Subjects</h1>
                 <Link to="/admin/add-subject" className="add-button">Add New Subject</Link>
                 <Link to="/hod" className="add-button" style={{marginLeft: '10px', backgroundColor: '#6c757d'}}>Dashboard</Link>
             </div>
-            <input 
+            <input
                 type="text"
                 placeholder="Search by name or code..."
                 className="search-bar"
@@ -109,14 +105,16 @@ const ViewSubjects = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             {error && <p className="error-message">{error}</p>}
-            
+
             <div className="view-table-container">
                 <table className="view-table">
                     <thead>
                         <tr>
                             <th>Subject Name</th>
                             <th>Subject Code</th>
-                            <th>Class</th>
+                            {/* --- UPDATE STARTS HERE --- */}
+                            {/* The "Class" column has been removed */}
+                            {/* --- UPDATE ENDS HERE --- */}
                             <th>Total Sessions</th>
                             <th>Actions</th>
                         </tr>
@@ -127,7 +125,9 @@ const ViewSubjects = () => {
                                 <tr key={subject._id}>
                                     <td>{subject.subjectname}</td>
                                     <td>{subject.subjectcode}</td>
-                                    <td>{subject.classname ? subject.classname.classname : 'N/A'}</td>
+                                    {/* --- UPDATE STARTS HERE --- */}
+                                    {/* The "Class" data cell has been removed */}
+                                    {/* --- UPDATE ENDS HERE --- */}
                                     <td>{subject.sessions}</td>
                                     <td>
                                         <button className="edit-button" onClick={() => handleEditClick(subject)}>Edit</button>
@@ -137,14 +137,13 @@ const ViewSubjects = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5">No subjects found.</td>
+                                <td colSpan="4">No subjects found.</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
 
-            {/* --- NEW MODAL JSX --- */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -160,13 +159,9 @@ const ViewSubjects = () => {
                                 <input type="text" name="subjectcode" value={updatedData.subjectcode} onChange={handleInputChange} required />
                                 <label>Total Sessions</label>
                                 <input type="number" name="sessions" value={updatedData.sessions} onChange={handleInputChange} required />
-                                <label>Class</label>
-                                <select name="classname" value={updatedData.classname} onChange={handleInputChange} required>
-                                    <option value="">Select a Class</option>
-                                    {allClasses.map(c => (
-                                        <option key={c._id} value={c._id}>{c.classname}</option>
-                                    ))}
-                                </select>
+                                {/* --- UPDATE STARTS HERE --- */}
+                                {/* The "Class" select dropdown has been removed from the modal */}
+                                {/* --- UPDATE ENDS HERE --- */}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" onClick={handleModalClose} className="modal-cancel-button">Cancel</button>

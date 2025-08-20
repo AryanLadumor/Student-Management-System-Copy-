@@ -13,11 +13,6 @@ const subjectSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    classname: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Class',
-        required: true,
-    },
     admin: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admin',

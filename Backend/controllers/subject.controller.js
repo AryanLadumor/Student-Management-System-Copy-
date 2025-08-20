@@ -44,8 +44,7 @@ export const createSubject = async (req, res) => {
 export const allSubjects = async (req, res) => {
   try {
     const subjects = await Subject.find({ admin: req.params.adminId })
-      .populate('classname', 'classname')
-      .populate("teacher","name")
+      .populate("teacher","name");
 
     if (!subjects.length) {
       return res.status(404).json({ message: 'No subjects found' });

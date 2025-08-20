@@ -17,7 +17,7 @@ router.route('/createsub').post(VerifyAdmin,createSubject); // POST - Create a s
 
 router.route('/admin/:adminId').get(VerifyAdmin,allSubjects).delete(VerifyAdmin,deleteSubjects); // GET - All subjects for an admin
 
-router.route('/class/:classId').get(VerifyAdmin,classSubjects).delete(VerifyAdmin,deleteSubjectsByClass); // GET - Subjects for a class
+router.route('/class/:classId').get(classSubjects).delete(VerifyAdmin,deleteSubjectsByClass); // GET - Subjects for a class
 
 router.route('/:subjectId').get(getSubjectDetail).put(VerifyAdmin,updateSubject).delete(VerifyAdmin,deleteSubject); // GET - One subject by ID
 

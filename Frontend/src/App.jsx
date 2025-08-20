@@ -30,6 +30,7 @@ import StudentLogout from './Pages/Student/Logout';
 import CreateComplain from './Pages/Student/CreateComplain';
 import ViewComplaints from './Pages/Admin/ViewComplaints';
 import StudentViewComplaints from './Pages/Student/ViewComplaints';
+import StudentSubjects from './Pages/Student/StudentSubjects';
 
 function App() {
   return (
@@ -45,9 +46,9 @@ function App() {
                     <Route path="/student/profile" element={<StudentProfile />} />
                     <Route path="/student/login" element={<StudentLogin />} />
                     <Route path="/student/logout" element={<StudentLogout />} />
-                     <Route path="/student/complain" element={<CreateComplain />} />
-                      <Route path="/student/my-complaints" element={<StudentViewComplaints />} />
-
+                    <Route path="/student/complain" element={<CreateComplain />} />
+                    <Route path="/student/my-complaints" element={<StudentViewComplaints />} />
+                    <Route path="/student/subjects" element={<StudentSubjects />} />
 
 
 
