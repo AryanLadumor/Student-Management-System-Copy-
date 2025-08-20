@@ -9,11 +9,7 @@ import {
   faBook,
   faBullhorn,
   faSignOutAlt,
-  faExclamationCircle,
-  faUserPlus,
-  faPlus,
-  faBookMedical,
-  faUserTie
+  faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -24,18 +20,21 @@ const HodDashboard = () => {
         localStorage.removeItem('admin');
         navigate('/admin/login');
     };
+    
     const navItems = [
         { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard', path: '/hod' },
         { icon: <FontAwesomeIcon icon={faUserGraduate} />, name: 'Students', path: '/admin/students' },
         { icon: <FontAwesomeIcon icon={faChalkboardTeacher} />, name: 'Teachers', path: '/admin/teachers' },
         { icon: <FontAwesomeIcon icon={faSchool} />, name: 'Classes', path: '/admin/classes' },
         { icon: <FontAwesomeIcon icon={faBook} />, name: 'Subjects', path: '/admin/subjects' },
-        { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Notice', path: '/admin/add-notice' },
+        // --- UPDATE STARTS HERE ---
+        // Changed the 'Notice' link to 'Manage Notices' and updated the path.
+        { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Manage Notices', path: '/admin/notices' },
+        // --- UPDATE ENDS HERE ---
         { icon: <FontAwesomeIcon icon={faExclamationCircle} />, name: 'Complaints', path: '/admin/complaints' },
         { icon: <FontAwesomeIcon icon={faSignOutAlt} />, name: 'Logout', action: handleLogout },
     ];
 
-    // ... The rest of the component remains unchanged
     return (
         <div className="dashboard-container">
             <aside className="sidebar">

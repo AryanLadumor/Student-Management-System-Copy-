@@ -9,11 +9,7 @@ import TeacherDashboard from "./Pages/TeacherDashboard";
 import HodDashboard from "./Pages/HODDashboard";
 import AdminLogin from "./Pages/Admin/AdminLogin";
 import AdminRegister from "./Pages/Admin/AdminRegister";
-import AddStudent from "./Pages/Admin/AddStudent"; 
-import AddClass from "./Pages/Admin/AddClass"; 
-import AddSubject from './Pages/Admin/AddSubject';
-import AddTeacher from './Pages/Admin/AddTeacher';
-import AddNotice from './Pages/Admin/AddNotice';
+
 import ViewClasses from './Pages/Admin/ViewClasses';
 import ViewStudents from './Pages/Admin/ViewStudents';
 import ViewTeachers from './Pages/Admin/ViewTeachers'; 
@@ -31,6 +27,7 @@ import CreateComplain from './Pages/Student/CreateComplain';
 import ViewComplaints from './Pages/Admin/ViewComplaints';
 import StudentViewComplaints from './Pages/Student/ViewComplaints';
 import StudentSubjects from './Pages/Student/StudentSubjects';
+import NoticeBoard from './Pages/NoticeBoard';
 
 function App() {
   return (
@@ -50,7 +47,8 @@ function App() {
                     <Route path="/student/my-complaints" element={<StudentViewComplaints />} />
                     <Route path="/student/subjects" element={<StudentSubjects />} />
 
-
+                  <Route path="/student/notices" element={<NoticeBoard />} />
+                    <Route path="/teacher/notices" element={<NoticeBoard />} />
 
                     <Route path="/teacher" element={<TeacherDashboard />} />
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
@@ -63,7 +61,7 @@ function App() {
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin/register" element={<AdminRegister />} />
                    
-
+                    <Route path="/admin/notices" element={<NoticeBoard />} />
                     <Route path="/admin/classes" element={<ViewClasses />} />
                     <Route path="/admin/students" element={<ViewStudents />} /> 
                     <Route path="/admin/teachers" element={<ViewTeachers />} /> 

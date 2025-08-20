@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 // --- Font Awesome Imports ---
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faBookOpen, faSearch ,faClock,faCommentDots,faRightFromBracket,faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faBookOpen, faBullhorn , faCommentDots,faRightFromBracket,faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 
 const StudentDashboard = () => {
     // --- Updated navItems with Font Awesome icons ---
@@ -14,6 +14,7 @@ const StudentDashboard = () => {
         { icon: <FontAwesomeIcon icon={faCalendarCheck} />, name: 'Attendance', path: '/student/attendance'},
         { icon: <FontAwesomeIcon icon={faCommentDots} />, name: 'My Complaints', path: '/student/my-complaints'},
         { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile', path: '/student/profile' },
+        { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Notice Board', path: '/student/notices' },
         { icon: <FontAwesomeIcon icon={faRightFromBracket} />, name: 'Logout', path: '/student/logout' },
     ];
 
