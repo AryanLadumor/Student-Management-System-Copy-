@@ -1,4 +1,5 @@
 import Subject from '../models/subject.model.js';
+import Class from '../models/class.model.js'; 
 import httpStatus from "http-status"
 
 // CREATE SINGLE SUBJECT
@@ -49,20 +50,26 @@ export const allSubjects = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error });
   }
 };
-
-// GET SUBJECTS BY CLASS
 export const classSubjects = async (req, res) => {
   try {
-    const subjects = await Subject.find({ classname: req.params.classId });
+    // --- FIX STARTS HERE ---
+    // Find the class to get the admin ID
+    const classDoc = await Class.findById(req.params.classId);
+    if (!classDoc) {
+        return res.status(404).json({ msg: 'Class not found' });
+    }
 
-    if (!subjects.length) return res.status(404).json({ msg: 'No subjects found' });
+    // Find all subjects associated with that admin
+    const subjects = await Subject.find({ admin: classDoc.admin });
+    // --- FIX ENDS HERE ---
+
+    if (!subjects.length) return res.status(404).json({ msg: 'No subjects found for this institution' });
 
     res.json(subjects);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error });
   }
 };
-
 
 // GET A SINGLE SUBJECT DETAIL
 export const getSubjectDetail = async (req, res) => {

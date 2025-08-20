@@ -8,7 +8,10 @@ import {
   addExamResult,
   deleteStudent,
   updateStudent,
-  getStudentsByClass
+  getStudentsByClass,
+  getExamResults,
+  getStudentsWithResults,
+  updateStudentMarks
 } from "../controllers/student.controller.js";
 import verifyAdmin from "../middleware/VerifyAdmin.js";
 
@@ -31,7 +34,12 @@ router.route("/institute/:id/").get(verifyAdmin , getAllStudents).delete(verifyA
 
 // Attendance and Exam Results
 router.route("/:studentId/attendance").post(verifyAdmin, markAttendance);
-router.route("/:studentId/results").post(verifyAdmin, addExamResult);
+router.route("/:studentId/results")
+    .get(getExamResults)
+    .put(updateStudentMarks) // This allows updating marks
+    .post(verifyAdmin, addExamResult);
+
+router.route("/admin/:adminId/results").get(getStudentsWithResults);
 
 
 const StudentRouter = router;
