@@ -10,14 +10,19 @@ import verifyAdmin from "../middleware/VerifyAdmin.js";
 
 const router = express.Router();
 
-// POST /sclass - Create new class
-router.post("/", verifyAdmin, createClass);
+// --- THIS IS THE CORRECTED CODE ---
 
-// GET /sclass/:id - List classes by admin ID
-router.get("/:id", listClasses);
+// POST /class -> Create a new class
+router.route("/").post(verifyAdmin, createClass);
 
-// GET /sclass/detail/:id - Get single class detail by class ID
-router.get("/detail/:id", getClassDetail).put(verifyAdmin, updateClass).delete(verifyAdmin, deleteClass);
+// GET /class/:id -> List all classes for a specific admin
+router.route("/:id").get(listClasses);
+
+// GET, PUT, DELETE /class/detail/:id -> Get, update, or delete a single class by its own ID
+router.route("/detail/:id")
+  .get(getClassDetail)
+  .put(verifyAdmin, updateClass)
+  .delete(verifyAdmin, deleteClass);
 
 const ClassRouter = router;
 export default ClassRouter;

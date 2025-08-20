@@ -58,6 +58,15 @@ const updateClass = async (req, res) => {
     try {
         const { id } = req.params;
         const { classname } = req.body;
+
+        // --- THIS IS THE FIX ---
+        // Check if another class with the same name already exists
+        const existingClass = await Class.findOne({ classname, _id: { $ne: id } });
+        if (existingClass) {
+            return res.status(409).json({ message: "This class name already exists." });
+        }
+        // --- END OF FIX ---
+
         const updatedClass = await Class.findByIdAndUpdate(id, { classname }, { new: true });
         if (!updatedClass) {
             return res.status(404).json({ message: "Class not found" });

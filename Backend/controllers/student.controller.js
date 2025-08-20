@@ -96,7 +96,19 @@ const getAllStudents = async (req, res) => {
 };
 
 
+const getStudentsByClass = async (req, res) => {
+  try {
+    const { classId } = req.params;
+    const students = await Student.find({ classname: classId }).select("-password"); // Find students by classname and exclude password
 
+    if (!students.length) {
+      return res.status(404).json({ msg: "No students found for this class" });
+    }
+    res.status(200).json(students);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+};
 
 const getStudentById = async (req, res) => {
   try {
@@ -146,4 +158,40 @@ const addExamResult = async (req, res) => {
     }
 };
 
-export { registerStudent, loginStudent, getAllStudents, getStudentById, markAttendance, addExamResult };
+const deleteStudent = async (req, res) => {
+    try {
+        const deletedStudent = await Student.findByIdAndDelete(req.params.id);
+        if (!deletedStudent) {
+            return res.status(404).json({ msg: "Student not found" });
+        }
+        res.status(200).json({ msg: "Student deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ msg: "Server error", error: error.message });
+    }
+};
+
+const updateStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, rollnumber, classname } = req.body;
+
+        const updatedStudent = await Student.findByIdAndUpdate(
+            id,
+            { name, rollnumber, classname },
+            { new: true } // This option returns the updated document
+        ).populate("classname", "classname");
+
+        if (!updatedStudent) {
+            return res.status(404).json({ msg: "Student not found" });
+        }
+        
+        // Don't send the password back
+        updatedStudent.password = undefined;
+
+        res.status(200).json({ msg: "Student updated successfully", student: updatedStudent });
+    } catch (error) {
+        res.status(500).json({ msg: "Server error", error: error.message });
+    }
+};
+
+export { registerStudent, loginStudent, getAllStudents, getStudentById, markAttendance, addExamResult , deleteStudent,updateStudent , getStudentsByClass };
