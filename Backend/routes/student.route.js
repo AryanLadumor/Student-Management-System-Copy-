@@ -19,7 +19,10 @@ const router = express.Router();
 router.route("/register").post(registerStudent);
 router.route("/login").post( loginStudent);
 
+// --- UPDATE STARTS HERE ---
+// This route is now accessible to teachers as well.
 router.route("/class/:classId").get(getStudentsByClass);
+// --- UPDATE ENDS HERE ---
 
 //Get Specific Student By Id
 router.route("/:id").get( getStudentById).put(verifyAdmin, updateStudent);;
