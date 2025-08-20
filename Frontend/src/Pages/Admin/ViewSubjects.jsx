@@ -99,6 +99,7 @@ const ViewSubjects = () => {
             <div className="view-header">
                 <h1>Manage Subjects</h1>
                 <Link to="/admin/add-subject" className="add-button">Add New Subject</Link>
+                <Link to="/hod" className="add-button" style={{marginLeft: '10px', backgroundColor: '#6c757d'}}>Dashboard</Link>
             </div>
             <input 
                 type="text"

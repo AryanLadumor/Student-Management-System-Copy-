@@ -18,9 +18,12 @@ import ViewClasses from './Pages/Admin/ViewClasses';
 import ViewStudents from './Pages/Admin/ViewStudents';
 import ViewTeachers from './Pages/Admin/ViewTeachers'; 
 import ViewSubjects from './Pages/Admin/ViewSubjects'; 
+import Logout from './Pages/Admin/Logout';
 
 import TeacherLogin from "./Pages/Teacher/TeacherLogin"; 
 import ClassStudents from './Pages/Teacher/ClassStudents';
+import TeacherProfile from './Pages/Teacher/TeacherProfile';
+import MyClasses from './Pages/Teacher/MyClasses';
 
 function App() {
   return (
@@ -40,6 +43,8 @@ function App() {
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
                     <Route path="/teacher/login" element={<TeacherLogin />} />
                     <Route path="/teacher/class/:classId/subject/:subjectId" element={<ClassStudents />} />
+                    <Route path="/teacher/profile" element={<TeacherProfile />} />
+                    <Route path="/teacher/classes" element={<MyClasses />} />
 
                     <Route path="/hod" element={<HodDashboard />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
@@ -54,6 +59,7 @@ function App() {
                     <Route path="/admin/students" element={<ViewStudents />} /> 
                     <Route path="/admin/teachers" element={<ViewTeachers />} /> 
                     <Route path="/admin/subjects" element={<ViewSubjects />} />
+                    <Route path="/logout" element={<Logout />} />
 
 
                     

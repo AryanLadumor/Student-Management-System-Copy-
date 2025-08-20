@@ -12,7 +12,9 @@ const ViewTeachers = () => {
     // State for modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentTeacher, setCurrentTeacher] = useState(null);
-    const [updatedData, setUpdatedData] = useState({ name: '', email: '' });
+    const [updatedData, setUpdatedData] = useState({ name: '', email: '', teaches: [] });
+    const [allClasses, setAllClasses] = useState([]);
+    const [allSubjects, setAllSubjects] = useState([]);
 
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const adminId = adminData ? adminData.id : null;
@@ -23,17 +25,23 @@ const ViewTeachers = () => {
             return;
         }
 
-        const fetchTeachers = async () => {
+        const fetchData = async () => {
             try {
-                const response = await api.get(`/teachers/admin/${adminId}`);
-                setTeachers(response.data);
+                const [teachersRes, classesRes, subjectsRes] = await Promise.all([
+                    api.get(`/teachers/admin/${adminId}`),
+                    api.get(`/class/${adminId}`),
+                    api.get(`/subjects/admin/${adminId}`)
+                ]);
+                setTeachers(teachersRes.data);
+                setAllClasses(classesRes.data);
+                setAllSubjects(subjectsRes.data);
             } catch (err) {
-                setError('Failed to fetch teachers.');
-                console.error("Error fetching teachers:", err);
+                setError('Failed to fetch data.');
+                console.error("Error fetching data:", err);
             }
         };
 
-        fetchTeachers();
+        fetchData();
     }, [adminId]);
 
     const handleDelete = async (teacherId) => {
@@ -47,12 +55,12 @@ const ViewTeachers = () => {
         }
     };
     
-    // --- NEW FUNCTIONS FOR MODAL ---
     const handleEditClick = (teacher) => {
         setCurrentTeacher(teacher);
         setUpdatedData({
             name: teacher.name,
-            email: teacher.email
+            email: teacher.email,
+            teaches: teacher.teaches.map(t => ({ class: t.class._id, subject: t.subject._id }))
         });
         setIsModalOpen(true);
     };
@@ -66,14 +74,27 @@ const ViewTeachers = () => {
         const { name, value } = e.target;
         setUpdatedData(prev => ({ ...prev, [name]: value }));
     };
+    
+    const handleAssignmentChange = (index, field, value) => {
+        const updatedTeaches = [...updatedData.teaches];
+        updatedTeaches[index][field] = value;
+        setUpdatedData(prev => ({...prev, teaches: updatedTeaches}));
+    };
+
+    const handleAddAssignment = () => {
+        setUpdatedData(prev => ({...prev, teaches: [...prev.teaches, { class: '', subject: '' }]}));
+    };
+
+    const handleRemoveAssignment = (index) => {
+        const updatedTeaches = updatedData.teaches.filter((_, i) => i !== index);
+        setUpdatedData(prev => ({...prev, teaches: updatedTeaches}));
+    };
 
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await api.put(`/teachers/${currentTeacher._id}`, updatedData);
-            // The backend returns the full teacher object, let's merge it with existing data
-            // to keep the populated 'teaches' array visible
-            const updatedTeacher = { ...currentTeacher, ...response.data.teacher };
+            const updatedTeacher = response.data.teacher;
             
             setTeachers(teachers.map(t => 
                 t._id === currentTeacher._id ? updatedTeacher : t
@@ -96,6 +117,7 @@ const ViewTeachers = () => {
             <div className="view-header">
                 <h1>Manage Teachers</h1>
                 <Link to="/admin/add-teacher" className="add-button">Add New Teacher</Link>
+                <Link to="/hod" className="add-button" style={{marginLeft: '10px', backgroundColor: '#6c757d'}}>Dashboard</Link>
             </div>
             <input 
                 type="text"
@@ -144,7 +166,6 @@ const ViewTeachers = () => {
                 </table>
             </div>
 
-            {/* --- NEW MODAL JSX --- */}
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -158,6 +179,31 @@ const ViewTeachers = () => {
                                 <input type="text" name="name" value={updatedData.name} onChange={handleInputChange} required />
                                 <label>Email</label>
                                 <input type="email" name="email" value={updatedData.email} onChange={handleInputChange} required />
+                                <h3 style={{ textAlign: 'left', marginTop: '1.5rem', marginBottom: '1rem' }}>Assign Classes & Subjects</h3>
+                                {updatedData.teaches.map((assignment, index) => (
+                                    <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '1rem', alignItems: 'center' }}>
+                                        <select
+                                            value={assignment.class}
+                                            onChange={(e) => handleAssignmentChange(index, 'class', e.target.value)}
+                                            style={{ flex: 1, padding: '12px', border: '1px solid #ced4da', borderRadius: '4px' }}
+                                        >
+                                            <option value="">Select Class</option>
+                                            {allClasses.map(c => <option key={c._id} value={c._id}>{c.classname}</option>)}
+                                        </select>
+                                        <select
+                                            value={assignment.subject}
+                                            onChange={(e) => handleAssignmentChange(index, 'subject', e.target.value)}
+                                            style={{ flex: 1, padding: '12px', border: '1px solid #ced4da', borderRadius: '4px' }}
+                                        >
+                                            <option value="">Select Subject</option>
+                                            {allSubjects.map(s => <option key={s._id} value={s._id}>{s.subjectname}</option>)}
+                                        </select>
+                                        {updatedData.teaches.length > 1 && (
+                                            <button type="button" onClick={() => handleRemoveAssignment(index)} style={{ padding: '8px 12px', background: '#dc3545' }}>X</button>
+                                        )}
+                                    </div>
+                                ))}
+                                <button type="button" onClick={handleAddAssignment} style={{ width: 'auto', background: '#28a745', marginBottom: '1rem' }}>Add Another Assignment</button>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" onClick={handleModalClose} className="modal-cancel-button">Cancel</button>

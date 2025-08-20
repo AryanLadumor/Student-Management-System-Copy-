@@ -100,6 +100,7 @@ const ViewStudents = () => {
             <div className="view-header">
                 <h1>Manage Students</h1>
                 <Link to="/admin/add-student" className="add-button">Add New Student</Link>
+                <Link to="/hod" className="add-button" style={{marginLeft: '10px', backgroundColor: '#6c757d'}}>Dashboard</Link>
             </div>
             <input 
                 type="text"

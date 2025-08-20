@@ -15,9 +15,15 @@ import {
   faBookMedical,
   faUserTie
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HodDashboard = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('admin');
+        navigate('/admin/login');
+    };
     const navItems = [
         { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard', path: '/hod' },
         { icon: <FontAwesomeIcon icon={faPlus} />, name: 'Add Class', path: '/admin/add-class' },
@@ -30,7 +36,7 @@ const HodDashboard = () => {
         { icon: <FontAwesomeIcon icon={faSchool} />, name: 'Classes', path: '/admin/classes' },
         { icon: <FontAwesomeIcon icon={faBook} />, name: 'Subjects', path: '/admin/subjects' },
         { icon: <FontAwesomeIcon icon={faExclamationCircle} />, name: 'Complaints', path: '/admin/complaints' },
-        { icon: <FontAwesomeIcon icon={faSignOutAlt} />, name: 'Logout', path: '/logout' },
+        { icon: <FontAwesomeIcon icon={faSignOutAlt} />, name: 'Logout', action: handleLogout },
     ];
 
     // ... The rest of the component remains unchanged
@@ -44,10 +50,17 @@ const HodDashboard = () => {
                     <ul>
                         {navItems.map((item, index) => (
                             <li key={index}>
-                                <Link to={item.path} className="nav-link">
-                                    {item.icon}
-                                    <span className="nav-text">{item.name}</span>
-                                </Link>
+                                {item.action ? (
+                                    <a href="#" onClick={item.action} className="nav-link">
+                                        {item.icon}
+                                        <span className="nav-text">{item.name}</span>
+                                    </a>
+                                ) : (
+                                    <Link to={item.path} className="nav-link">
+                                        {item.icon}
+                                        <span className="nav-text">{item.name}</span>
+                                    </Link>
+                                )}
                             </li>
                         ))}
                     </ul>

@@ -156,13 +156,15 @@ export const deleteTeacher = async (req, res) => {
 export const updateTeacher = async (req, res) => {
   try {
     const { teacherId } = req.params;
-    const { name, email } = req.body;
+    const { name, email, teaches } = req.body;
 
     const updatedTeacher = await Teacher.findByIdAndUpdate(
       teacherId,
-      { name, email },
+      { name, email, teaches },
       { new: true }
-    );
+    )
+    .populate("teaches.class", "classname")
+    .populate("teaches.subject", "subjectname");
 
     if (!updatedTeacher) {
       return res.status(404).json({ message: "Teacher not found" });

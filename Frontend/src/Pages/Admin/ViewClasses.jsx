@@ -79,6 +79,7 @@ const ViewClasses = () => {
             <div className="view-header">
                 <h1>Manage Classes</h1>
                 <Link to="/admin/add-class" className="add-button">Add New Class</Link>
+                <Link to="/hod" className="add-button" style={{marginLeft: '10px', backgroundColor: '#6c757d'}}>Dashboard</Link>
             </div>
             <input 
                 type="text"

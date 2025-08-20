@@ -76,21 +76,21 @@ const TeacherDashboard = () => {
                         <p>Select a class to manage attendance and marks.</p>
                     </section>
                     
-                    <div className="bottom-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))' }}>
+                    <div className="bottom-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
                         {teacher.teaches && teacher.teaches.length > 0 ? (
                             teacher.teaches.map(item => (
-                                <div key={item._id} className="info-card">
+                                <div key={item._id} className="info-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <div>
                                         <h3>{item.class.classname}</h3>
                                         <p><strong>Subject:</strong> {item.subject.subjectname}</p>
-                                        <Link 
-                                            to={`/teacher/class/${item.class._id}/subject/${item.subject._id}`}
-                                            className="add-button" 
-                                            style={{marginTop: '1rem'}}
-                                        >
-                                            Manage Students
-                                        </Link>
                                     </div>
+                                    <Link 
+                                        to={`/teacher/class/${item.class._id}/subject/${item.subject._id}`}
+                                        className="add-button" 
+                                        style={{marginTop: '1rem', textDecoration: 'none', textAlign: 'center'}}
+                                    >
+                                        Manage Students
+                                    </Link>
                                 </div>
                             ))
                         ) : (
