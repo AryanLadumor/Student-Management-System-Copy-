@@ -36,7 +36,7 @@ const studentSchema = new mongoose.Schema({
       },
       examType: {
           type: String,
-          enum: ["T1", "T2", "T3", "T4", "Final"],
+          enum: ["T1", "T2", "T3", "T4"],
       },
       marks: {
         type: Number,
