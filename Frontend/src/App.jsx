@@ -62,11 +62,7 @@ function App() {
                     <Route path="/hod" element={<HodDashboard />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin/register" element={<AdminRegister />} />
-                    <Route path="/admin/add-student" element={<AddStudent />} /> 
-                    <Route path="/admin/add-class" element={<AddClass />} />
-                    <Route path="/admin/add-subject" element={<AddSubject />} />
-                    <Route path="/admin/add-teacher" element={<AddTeacher />} /> 
-                    <Route path="/admin/add-notice" element={<AddNotice />} /> 
+                   
 
                     <Route path="/admin/classes" element={<ViewClasses />} />
                     <Route path="/admin/students" element={<ViewStudents />} /> 
