@@ -5,6 +5,7 @@ import {
   getComplainsForAdmin,
   updateComplainStatus,
   deleteComplain,
+  getComplainsByStudent,
 } from '../controllers/complain.controller.js';
 import VerifyAdmin from '../middleware/VerifyAdmin.js';
 
@@ -17,6 +18,10 @@ router
 router
   .route('/admin/:adminId')
   .get(getComplainsForAdmin);
+  
+router
+  .route('/student/:studentId')
+  .get(getComplainsByStudent);
 
 router
   .route('/:complainId')

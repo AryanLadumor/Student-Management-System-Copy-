@@ -39,6 +39,23 @@ export const getComplainsForAdmin = async (req, res) => {
   }
 };
 
+// STUDENT views their own complaints
+export const getComplainsByStudent = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const complains = await Complain.find({ student: studentId }).sort({ createdAt: -1 });
+
+    if (!complains.length) {
+      return res.status(httpStatus.NOT_FOUND).json({ msg: "You have not submitted any complaints yet." });
+    }
+
+    res.json(complains);
+  } catch (err) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Server error", error: err });
+  }
+};
+
+
 // ADMIN updates status and adds response
 export const updateComplainStatus = async (req, res) => {
   try {

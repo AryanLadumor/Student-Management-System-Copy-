@@ -7,7 +7,7 @@ export default function SelectRolePage() {
     <div className="role-selection-container">
       <h1>Select Your Role</h1>
       <div className="roles-wrapper">
-        <Link to="/student">
+        <Link to="/student/login">
           <div className="role-card">
             <p>Student</p>
           </div>

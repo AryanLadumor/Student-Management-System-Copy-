@@ -1,0 +1,95 @@
+.view-complaints-container {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+.view-complaints-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.complaints-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.complain-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+}
+
+.complain-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.complain-card-header h3 {
+    margin: 0;
+}
+
+.complain-message {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.complain-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.respond-button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.respond-button:hover {
+    background-color: #0056b3;
+}
+
+.status-badge {
+    padding: 0.25em 0.6em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 10px;
+    color: white;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.status-resolved {
+    background-color: #28a745;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+}
+
+/* For the modal inputs */
+.modal-body textarea, .modal-body select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}

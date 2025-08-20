@@ -1,5 +1,6 @@
 import React from 'react';
 import './Dashboard.css'; // Your CSS file remains the same
+import { Link } from 'react-router-dom';
 
 // --- Font Awesome Imports ---
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,12 +9,12 @@ import { faHome, faUser, faBookOpen, faSearch ,faClock,faCommentDots,faRightFrom
 const StudentDashboard = () => {
     // --- Updated navItems with Font Awesome icons ---
     const navItems = [
-        { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard' },
-        { icon: <FontAwesomeIcon icon={faBookOpen} />, name: 'subject' },
-        { icon: <FontAwesomeIcon icon={faCalendarCheck} />, name: 'Attendance'},
-        { icon: <FontAwesomeIcon icon={faCommentDots} />, name: 'Complain'},
-        { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile' },
-        { icon: <FontAwesomeIcon icon={faRightFromBracket} />, name: 'Logout' },
+        { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard', path: '/student' },
+        { icon: <FontAwesomeIcon icon={faBookOpen} />, name: 'Subjects', path: '/student/subjects' },
+        { icon: <FontAwesomeIcon icon={faCalendarCheck} />, name: 'Attendance', path: '/student/attendance'},
+        { icon: <FontAwesomeIcon icon={faCommentDots} />, name: 'My Complaints', path: '/student/my-complaints'},
+        { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile', path: '/student/profile' },
+        { icon: <FontAwesomeIcon icon={faRightFromBracket} />, name: 'Logout', path: '/student/logout' },
     ];
 
     const tableData = [
@@ -40,11 +41,11 @@ const StudentDashboard = () => {
                     <ul>
                         {navItems.map((item, index) => (
                             <li key={index}>
-                                <a href="#" className="nav-link">
+                                <Link to={item.path} className="nav-link">
                                     {item.icon}
                                     <span className="nav-text">{item.name}</span>
                                     {item.count && <span className="nav-count">{item.count}</span>}
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>

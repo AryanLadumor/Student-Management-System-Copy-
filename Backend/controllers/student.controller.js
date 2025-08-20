@@ -49,7 +49,10 @@ const loginStudent = async (req, res) => {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Institute not found" });
     }
 
-    const student = await Student.findOne({ rollnumber, admin: admin._id });
+    const student = await Student.findOne({ rollnumber, admin: admin._id })
+      .populate("classname", "classname")
+      .populate("admin", "institutename");
+      
     if (!student) {
       return res.status(httpStatus.NOT_FOUND).json({ msg: "Student not found under this institute" });
     }

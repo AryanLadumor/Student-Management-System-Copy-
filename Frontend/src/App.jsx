@@ -24,6 +24,12 @@ import TeacherLogin from "./Pages/Teacher/TeacherLogin";
 import ClassStudents from './Pages/Teacher/ClassStudents';
 import TeacherProfile from './Pages/Teacher/TeacherProfile';
 import MyClasses from './Pages/Teacher/MyClasses';
+import StudentProfile from './Pages/Student/StudentProfile';
+import StudentLogin from './Pages/Student/StudentLogin';
+import StudentLogout from './Pages/Student/Logout';
+import CreateComplain from './Pages/Student/CreateComplain';
+import ViewComplaints from './Pages/Admin/ViewComplaints';
+import StudentViewComplaints from './Pages/Student/ViewComplaints';
 
 function App() {
   return (
@@ -36,6 +42,12 @@ function App() {
                     <Route path="/select-role" element={<SelectRolePage />} />
                    
                     <Route path="/student" element={<StudentDashboard />} />
+                    <Route path="/student/profile" element={<StudentProfile />} />
+                    <Route path="/student/login" element={<StudentLogin />} />
+                    <Route path="/student/logout" element={<StudentLogout />} />
+                     <Route path="/student/complain" element={<CreateComplain />} />
+                      <Route path="/student/my-complaints" element={<StudentViewComplaints />} />
+
 
 
 
@@ -59,6 +71,7 @@ function App() {
                     <Route path="/admin/students" element={<ViewStudents />} /> 
                     <Route path="/admin/teachers" element={<ViewTeachers />} /> 
                     <Route path="/admin/subjects" element={<ViewSubjects />} />
+                    <Route path="/admin/complaints" element={<ViewComplaints />} />
                     <Route path="/logout" element={<Logout />} />
 
 

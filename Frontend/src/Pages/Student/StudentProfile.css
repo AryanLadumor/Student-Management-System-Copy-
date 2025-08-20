@@ -1,0 +1,81 @@
+.student-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    padding: 2rem;
+}
+
+.student-profile-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    overflow: hidden;
+}
+
+.student-profile-header {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 5px solid #fff;
+}
+
+.student-profile-header h2 {
+    margin-top: 1rem;
+    font-size: 1.8rem;
+}
+
+.student-profile-body {
+    padding: 2rem;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    color: #6e8efb;
+    margin-right: 1.5rem;
+    width: 30px;
+}
+
+.info-row div {
+    font-size: 1.1rem;
+}
+
+.info-row strong {
+    color: #374151;
+}
+
+.info-row p {
+    color: #6b7280;
+    margin: 0.25rem 0 0;
+}
+
+.back-link {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.back-link:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
