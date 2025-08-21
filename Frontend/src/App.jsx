@@ -11,9 +11,13 @@ import AdminLogin from "./Pages/Admin/AdminLogin";
 import AdminRegister from "./Pages/Admin/AdminRegister";
 
 import ViewClasses from './Pages/Admin/ViewClasses';
+import AddClass from './Pages/Admin/AddClass';
 import ViewStudents from './Pages/Admin/ViewStudents';
+import AddStudent from './Pages/Admin/AddStudent';
 import ViewTeachers from './Pages/Admin/ViewTeachers'; 
+import AddTeacher from './Pages/Admin/AddTeacher';
 import ViewSubjects from './Pages/Admin/ViewSubjects'; 
+import AddSubject from './Pages/Admin/AddSubject';
 import Logout from './Pages/Admin/Logout';
 
 import TeacherLogin from "./Pages/Teacher/TeacherLogin"; 
@@ -29,7 +33,11 @@ import StudentViewComplaints from './Pages/Student/ViewComplaints';
 import StudentSubjects from './Pages/Student/StudentSubjects';
 import StudentExamResults from './Pages/Student/StudentExamResults';
 import NoticeBoard from './Pages/NoticeBoard';
+import MarkAttendance from './Pages/Teacher/MarkAttendance';
+import AddNotice from './Pages/Admin/AddNotice';
 import ViewStudentMarks from './Pages/ViewStudentMarks';
+import StudentAttendance from "./Pages/Student/StudentAttendance";
+import AddMarks from './Pages/Teacher/AddMarks';
 
 function App() {
   return (
@@ -50,11 +58,14 @@ function App() {
                     <Route path="/student/subjects" element={<StudentSubjects />} />
                     <Route path="/student/results" element={<StudentExamResults />} />
                     <Route path="/student/notices" element={<NoticeBoard />} />
+                    <Route path="/student/attendance" element={<StudentAttendance />} />
 
                     <Route path="/teacher" element={<TeacherDashboard />} />
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
                     <Route path="/teacher/login" element={<TeacherLogin />} />
                     <Route path="/teacher/class/:classId/subject/:subjectId" element={<ClassStudents />} />
+                    <Route path="/teacher/class/:classId/subject/:subjectId/attendance" element={<MarkAttendance />} />
+                    <Route path="/teacher/class/:classId/subject/:subjectId/add-marks" element={<AddMarks />} />
                     <Route path="/teacher/profile" element={<TeacherProfile />} />
                     <Route path="/teacher/classes" element={<MyClasses />} />
                     <Route path="/teacher/notices" element={<NoticeBoard />} />
@@ -67,12 +78,17 @@ function App() {
                     <Route path="/admin/register" element={<AdminRegister />} />
                    
                     <Route path="/admin/classes" element={<ViewClasses />} />
+                    <Route path="/admin/add-class" element={<AddClass />} />
                     <Route path="/admin/students" element={<ViewStudents />} /> 
-                      <Route path="/admin/students/marks" element={<ViewStudentMarks />} />
+                    <Route path="/admin/add-student" element={<AddStudent />} />
+                    <Route path="/admin/students/marks" element={<ViewStudentMarks />} />
                     <Route path="/admin/teachers" element={<ViewTeachers />} /> 
+                    <Route path="/admin/add-teacher" element={<AddTeacher />} />
                     <Route path="/admin/subjects" element={<ViewSubjects />} />
+                    <Route path="/admin/add-subject" element={<AddSubject />} />
                     <Route path="/admin/complaints" element={<ViewComplaints />} />
                     <Route path="/admin/notices" element={<NoticeBoard />} />
+                    <Route path="/admin/add-notice" element={<AddNotice />} />
                     <Route path="/logout" element={<Logout />} />
 
 

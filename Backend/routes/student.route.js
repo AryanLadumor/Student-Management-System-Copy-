@@ -11,7 +11,8 @@ import {
   getStudentsByClass,
   getExamResults,
   getStudentsWithResults,
-  updateStudentMarks
+  updateStudentMarks,
+  updateSubjectMarksForStudent
 } from "../controllers/student.controller.js";
 import verifyAdmin from "../middleware/VerifyAdmin.js";
 
@@ -40,7 +41,9 @@ router.route("/:studentId/results")
     .post(verifyAdmin, addExamResult);
 
 router.route("/admin/:adminId/results").get(getStudentsWithResults);
+router.route("/:studentId/subjects/:subjectId/marks").put(updateSubjectMarksForStudent);
 
 
 const StudentRouter = router;
 export default StudentRouter;
+  

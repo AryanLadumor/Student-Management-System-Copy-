@@ -74,11 +74,10 @@ const ViewStudentMarks = () => {
     };
 
     const handleMarkChange = (resultId, newMark) => {
-        // --- FIX STARTS HERE ---
-        // This ensures that if the input is cleared, it defaults to 0, preventing NaN errors.
-        const markValue = newMark === '' ? 0 : parseInt(newMark, 10);
-        if (isNaN(markValue)) return; // Prevent non-numeric input
-        // --- FIX ENDS HERE ---
+        const markValue = newMark === '' ? '' : parseFloat(newMark);
+        if (newMark !== '' && (isNaN(markValue) || markValue < 0 || markValue > 100)) {
+            return;
+        }
 
         setEditableMarks(currentMarks =>
             currentMarks.map(mark =>
@@ -89,7 +88,11 @@ const ViewStudentMarks = () => {
 
     const handleSaveClick = async (studentId) => {
         try {
-            await api.put(`/students/${studentId}/results`, { examResults: editableMarks });
+            const finalMarks = editableMarks.map(mark => ({
+                ...mark,
+                marks: mark.marks === '' ? 0 : mark.marks
+            }));
+            await api.put(`/students/${studentId}/results`, { examResults: finalMarks });
             setEditingStudentId(null);
             fetchData(); // Refresh data after saving
         } catch (err) {
@@ -151,13 +154,18 @@ const ViewStudentMarks = () => {
                                         <div className="tests">
                                             {['T1', 'T2', 'T3', 'T4'].map(test => {
                                                 const result = getMarksForTest(results, subject, test);
+                                                const displayMarks = editingStudentId === student._id 
+                                                    ? (editableMarks.find(m => m._id === result._id)?.marks ?? '')
+                                                    : result.marks;
+
                                                 return (
                                                     <div key={test} className="test-mark">
                                                         <label>{test}</label>
                                                         {editingStudentId === student._id ? (
                                                             <input
                                                                 type="number"
-                                                                value={result.marks}
+                                                                step="0.5"
+                                                                value={displayMarks}
                                                                 onChange={(e) => handleMarkChange(result._id, e.target.value)}
                                                                 className="marks-input"
                                                             />

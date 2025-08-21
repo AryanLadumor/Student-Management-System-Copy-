@@ -10,10 +10,7 @@ const ViewSubjects = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentSubject, setCurrentSubject] = useState(null);
-    // --- UPDATE STARTS HERE ---
-    // Removed 'classname' from the state
     const [updatedData, setUpdatedData] = useState({ subjectname: '', subjectcode: '', sessions: '' });
-    // --- UPDATE ENDS HERE ---
 
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const adminId = adminData ? adminData.id : null;
@@ -50,14 +47,11 @@ const ViewSubjects = () => {
 
     const handleEditClick = (subject) => {
         setCurrentSubject(subject);
-        // --- UPDATE STARTS HERE ---
-        // Removed 'classname' from the data being set
         setUpdatedData({
             subjectname: subject.subjectname,
             subjectcode: subject.subjectcode,
             sessions: subject.sessions,
         });
-        // --- UPDATE ENDS HERE ---
         setIsModalOpen(true);
     };
 
@@ -112,9 +106,6 @@ const ViewSubjects = () => {
                         <tr>
                             <th>Subject Name</th>
                             <th>Subject Code</th>
-                            {/* --- UPDATE STARTS HERE --- */}
-                            {/* The "Class" column has been removed */}
-                            {/* --- UPDATE ENDS HERE --- */}
                             <th>Total Sessions</th>
                             <th>Actions</th>
                         </tr>
@@ -125,9 +116,6 @@ const ViewSubjects = () => {
                                 <tr key={subject._id}>
                                     <td>{subject.subjectname}</td>
                                     <td>{subject.subjectcode}</td>
-                                    {/* --- UPDATE STARTS HERE --- */}
-                                    {/* The "Class" data cell has been removed */}
-                                    {/* --- UPDATE ENDS HERE --- */}
                                     <td>{subject.sessions}</td>
                                     <td>
                                         <button className="edit-button" onClick={() => handleEditClick(subject)}>Edit</button>
@@ -159,9 +147,6 @@ const ViewSubjects = () => {
                                 <input type="text" name="subjectcode" value={updatedData.subjectcode} onChange={handleInputChange} required />
                                 <label>Total Sessions</label>
                                 <input type="number" name="sessions" value={updatedData.sessions} onChange={handleInputChange} required />
-                                {/* --- UPDATE STARTS HERE --- */}
-                                {/* The "Class" select dropdown has been removed from the modal */}
-                                {/* --- UPDATE ENDS HERE --- */}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" onClick={handleModalClose} className="modal-cancel-button">Cancel</button>

@@ -114,9 +114,9 @@ const getAllStudents = async (req, res) => {
 const getStudentsByClass = async (req, res) => {
   try {
     const { classId } = req.params;
-    const students = await Student.find({ classname: classId }).select(
-      "-password"
-    ); // Find students by classname and exclude password
+    const students = await Student.find({ classname: classId })
+      .select("-password")
+      .populate("classname", "classname");
 
     if (!students.length) {
       return res.status(404).json({ msg: "No students found for this class" });
@@ -270,6 +270,36 @@ const updateStudentMarks = async (req, res) => {
   }
 };
 
+const updateSubjectMarksForStudent = async (req, res) => {
+    try {
+        const { studentId, subjectId } = req.params;
+        const { marks } = req.body; // Expecting an array like [{ examType: 'T1', marks: 95 }, ...]
+
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({ msg: "Student not found" });
+        }
+
+        // Remove old marks for this subject
+        student.examResult = student.examResult.filter(result => result.subject.toString() !== subjectId);
+
+        // Add new marks for this subject
+        marks.forEach(mark => {
+            student.examResult.push({
+                subject: subjectId,
+                examType: mark.examType,
+                marks: mark.marks
+            });
+        });
+
+        await student.save();
+        res.status(200).json({ msg: "Marks updated successfully" });
+
+    } catch (error) {
+        res.status(500).json({ msg: "Server error", error: error.message });
+    }
+};
+
 export {
   registerStudent,
   loginStudent,
@@ -283,4 +313,5 @@ export {
   getExamResults,
   updateStudentMarks,
   getStudentsWithResults,
+  updateSubjectMarksForStudent,
 };

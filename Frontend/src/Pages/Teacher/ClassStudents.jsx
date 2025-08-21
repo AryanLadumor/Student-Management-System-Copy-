@@ -40,7 +40,15 @@ const ClassStudents = () => {
                     <h1>{classInfo ? classInfo.classname : 'Class'} Students</h1>
                     <p style={{marginTop: '0.5rem'}}>Managing Subject: <strong>{subjectInfo ? subjectInfo.subjectname : '...'}</strong></p>
                 </div>
-                <Link to="/teacher/dashboard" className="add-button" style={{backgroundColor: '#6c757d'}}>Back to Dashboard</Link>
+                <div>
+                    <Link to={`/teacher/class/${classId}/subject/${subjectId}/attendance`} className="add-button" style={{marginRight: '1rem'}}>
+                        Mark Attendance
+                    </Link>
+                    <Link to={`/teacher/class/${classId}/subject/${subjectId}/add-marks`} className="add-button" style={{marginRight: '1rem'}}>
+                       Add/Edit Marks
+                   </Link>
+                    <Link to="/teacher/dashboard" className="add-button" style={{backgroundColor: '#6c757d'}}>Back to Dashboard</Link>
+                </div>
             </div>
             {error && <p className="error-message">{error}</p>}
             <div className="view-table-container">
@@ -49,7 +57,6 @@ const ClassStudents = () => {
                         <tr>
                             <th>Name</th>
                             <th>Roll Number</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,15 +65,11 @@ const ClassStudents = () => {
                                 <tr key={student._id}>
                                     <td>{student.name}</td>
                                     <td>{student.rollnumber}</td>
-                                    <td>
-                                        <button className="edit-button">Mark Attendance</button>
-                                        <button className="add-button" style={{marginLeft: '10px'}}>Add Marks</button>
-                                    </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="3">No students found in this class.</td>
+                                <td colSpan="2">No students found in this class.</td>
                             </tr>
                         )}
                     </tbody>

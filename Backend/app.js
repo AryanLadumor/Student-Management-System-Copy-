@@ -14,6 +14,7 @@ import SubjectRouter from './routes/subject.route.js';
 import TeacherRouter from './routes/teacher.route.js';
 import ComplainRouter from './routes/complain.route.js';
 import NoticeRouter  from './routes/notice.route.js';
+import AttendanceRouter from './routes/attendance.route.js';
 
 //server APP
 const app = express();
@@ -40,6 +41,7 @@ app.use("/subjects" , SubjectRouter)
 app.use("/teachers" ,TeacherRouter)
 app.use("/complain" , ComplainRouter)
 app.use("/notices" , NoticeRouter)
+app.use("/attendance", AttendanceRouter);
 
 app.get('/', (req, res) => {
     res.send('API is running...');  
