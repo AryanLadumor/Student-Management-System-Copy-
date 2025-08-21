@@ -10,7 +10,9 @@ import {
   faBullhorn,
   faSignOutAlt,
   faExclamationCircle,
-  faClipboardList
+  faClipboardList,
+  faChartPie,
+  faChalkboard
 } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -27,12 +29,12 @@ const HodDashboard = () => {
         { icon: <FontAwesomeIcon icon={faUserGraduate} />, name: 'Students', path: '/admin/students' },
         { icon: <FontAwesomeIcon icon={faChalkboardTeacher} />, name: 'Teachers', path: '/admin/teachers' },
         { icon: <FontAwesomeIcon icon={faSchool} />, name: 'Classes', path: '/admin/classes' },
-         { icon: <FontAwesomeIcon icon={faBook} />, name: 'Subjects', path: '/admin/subjects' },
-        
-         { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Manage Notices', path: '/admin/notices' },
-        
-         { icon: <FontAwesomeIcon icon={faExclamationCircle} />, name: 'Complaints', path: '/admin/complaints' },
-         { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/admin/students/marks' },
+        { icon: <FontAwesomeIcon icon={faBook} />, name: 'Subjects', path: '/admin/subjects' },
+        { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Manage Notices', path: '/admin/notices' },
+        { icon: <FontAwesomeIcon icon={faExclamationCircle} />, name: 'Complaints', path: '/admin/complaints' },
+        { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/admin/students/marks' },
+        { icon: <FontAwesomeIcon icon={faChartPie} />, name: 'Student Analysis', path: '/admin/analysis' },
+        { icon: <FontAwesomeIcon icon={faChalkboard} />, name: 'Class Insights', path: '/admin/class-analysis' },
         { icon: <FontAwesomeIcon icon={faSignOutAlt} />, name: 'Logout', action: handleLogout },
     ];
 
