@@ -36,6 +36,8 @@ import StudentAttendance from "./Pages/Student/StudentAttendance";
 import AddMarks from './Pages/Teacher/AddMarks';
 import PerformanceAnalysis from './Pages/Admin/PerformanceAnalysis';
 import ClassAnalysis from './Pages/Admin/ClassAnalysis';
+import PredictiveAnalysis from './Pages/Admin/PredictiveAnalysis';
+
 
 function App() {
   return (
@@ -87,6 +89,7 @@ function App() {
         <Route path="/admin/add-notice" element={<AddNotice />} />
         <Route path="/admin/analysis" element={<PerformanceAnalysis />} />
         <Route path="/admin/class-analysis" element={<ClassAnalysis />} />
+        <Route path="/admin/predictive-analysis" element={<PredictiveAnalysis />} />  
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>

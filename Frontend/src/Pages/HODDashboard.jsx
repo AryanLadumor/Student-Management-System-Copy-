@@ -14,6 +14,7 @@ import {
   faChartPie,
   faChalkboard
 } from '@fortawesome/free-solid-svg-icons';
+import { faBrain } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 
 const HodDashboard = () => {
@@ -35,6 +36,7 @@ const HodDashboard = () => {
         { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/admin/students/marks' },
         { icon: <FontAwesomeIcon icon={faChartPie} />, name: 'Student Analysis', path: '/admin/analysis' },
         { icon: <FontAwesomeIcon icon={faChalkboard} />, name: 'Class Insights', path: '/admin/class-analysis' },
+        { icon: <FontAwesomeIcon icon={faBrain} />, name: 'Predictive Insights', path: '/admin/predictive-analysis' },
         { icon: <FontAwesomeIcon icon={faSignOutAlt} />, name: 'Logout', action: handleLogout },
     ];
 

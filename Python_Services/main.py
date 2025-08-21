@@ -7,6 +7,7 @@ from analysis import (
     get_at_risk_students
 )
 from class_analysis import get_class_performance_data, get_teacher_performance_data
+from predictive_models import train_prediction_model, get_performance_predictions
 
 app = FastAPI()
 
@@ -19,11 +20,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+MODELS = train_prediction_model()
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Student Performance Analysis API"}
 
 # --- Student Performance Endpoints ---
+@app.get("/predict-performance")
+def predict_performance():
+    """
+    Predicts future student performance based on T1 and T2 scores.
+    """
+    if not MODELS:
+        return {"error": "Model not trained. Not enough data available."}
+    
+    predictions = get_performance_predictions(MODELS)
+    return predictions
+
 @app.get("/performance")
 def get_performance_data():
     df = fetch_data_from_db()

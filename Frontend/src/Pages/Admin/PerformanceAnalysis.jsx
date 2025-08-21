@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import pythonApi from '../../api/pythonApi';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import './PerformanceAnalysis.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faChartPie, faExclamationTriangle, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faChartPie, faExclamationTriangle, faTrophy, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -17,14 +17,27 @@ const PerformanceAnalysis = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // New state for interactive features
+    const [rankingSearchTerm, setRankingSearchTerm] = useState('');
+    const [atRiskThreshold, setAtRiskThreshold] = useState(60);
+
+    const fetchAtRiskStudents = useCallback(async (threshold) => {
+        try {
+            const atRiskRes = await pythonApi.get(`/at-risk?threshold=${threshold}`);
+            setAtRiskStudents(atRiskRes.data);
+        } catch (err) {
+            setError('Failed to update at-risk students. Please ensure the analysis service is running.');
+        }
+    }, []);
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchInitialData = async () => {
             try {
                 setLoading(true);
                 const [perfRes, insightsRes, atRiskRes] = await Promise.all([
                     pythonApi.get('/performance'),
                     pythonApi.get('/subject-insights'),
-                    pythonApi.get('/at-risk?threshold=60')
+                    pythonApi.get(`/at-risk?threshold=${atRiskThreshold}`)
                 ]);
                 setPerformanceData(perfRes.data);
                 setSubjectInsights(insightsRes.data);
@@ -36,8 +49,29 @@ const PerformanceAnalysis = () => {
                 setLoading(false);
             }
         };
-        fetchData();
+        fetchInitialData();
     }, []);
+
+    // Debounce the API call for the threshold slider
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            fetchAtRiskStudents(atRiskThreshold);
+        }, 500); // 500ms delay
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [atRiskThreshold, fetchAtRiskStudents]);
+
+    const filteredPerformanceData = useMemo(() => {
+        if (!rankingSearchTerm) {
+            return performanceData;
+        }
+        return performanceData.filter(student =>
+            student.NAME.toLowerCase().includes(rankingSearchTerm.toLowerCase()) ||
+            student['Roll Number'].toString().includes(rankingSearchTerm)
+        );
+    }, [rankingSearchTerm, performanceData]);
 
     const subjectChartData = {
         labels: subjectInsights ? Object.keys(subjectInsights) : [],
@@ -69,9 +103,21 @@ const PerformanceAnalysis = () => {
                 </Link>
             </div>
 
-            {/* At-Risk Students Section */}
             <div className="analysis-card">
-                <h2><FontAwesomeIcon icon={faExclamationTriangle} /> At-Risk Students (Below 60%)</h2>
+                <div className="card-header-controls">
+                    <h2><FontAwesomeIcon icon={faExclamationTriangle} /> At-Risk Students</h2>
+                    <div className="threshold-control">
+                        <label htmlFor="risk-threshold">Threshold: {atRiskThreshold}%</label>
+                        <input
+                            id="risk-threshold"
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={atRiskThreshold}
+                            onChange={(e) => setAtRiskThreshold(e.target.value)}
+                        />
+                    </div>
+                </div>
                 <div className="table-container">
                     <table className="analysis-table">
                         <thead>
@@ -90,13 +136,12 @@ const PerformanceAnalysis = () => {
                                     <td>{student.Class}</td>
                                     <td>{student.Percentage.toFixed(2)}%</td>
                                 </tr>
-                            )) : <tr><td colSpan="4">No students are currently at risk.</td></tr>}
+                            )) : <tr><td colSpan="4">No students are currently below the selected threshold.</td></tr>}
                         </tbody>
                     </table>
                 </div>
             </div>
             
-            {/* Subject Insights Section */}
             <div className="analysis-card">
                  <h2><FontAwesomeIcon icon={faChartPie} /> Subject Performance Insights</h2>
                 <div className="chart-container">
@@ -104,9 +149,18 @@ const PerformanceAnalysis = () => {
                 </div>
             </div>
 
-            {/* Overall Performance Section */}
             <div className="analysis-card">
                 <h2><FontAwesomeIcon icon={faTrophy} /> Overall Student Rankings</h2>
+                <div className="search-bar-wrapper">
+                    <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search by Name or Roll Number..."
+                        className="analysis-search-bar"
+                        value={rankingSearchTerm}
+                        onChange={(e) => setRankingSearchTerm(e.target.value)}
+                    />
+                </div>
                 <div className="table-container">
                      <table className="analysis-table">
                         <thead>
@@ -119,7 +173,7 @@ const PerformanceAnalysis = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {performanceData.map((student, index) => (
+                            {filteredPerformanceData.map((student, index) => (
                                 <tr key={index}>
                                     <td>{student['Overall Rank']}</td>
                                     <td>{student.NAME}</td>
