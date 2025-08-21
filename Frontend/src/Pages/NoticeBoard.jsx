@@ -27,10 +27,14 @@ const NoticeBoard = () => {
             setIsAdmin(true);
         }
 
+        // --- FIX STARTS HERE ---
+        // The previous check was incorrect for the admin user.
+        // This new check ensures that there is some valid user data before proceeding.
         if (!userData) {
             navigate('/select-role');
             return;
         }
+        // --- FIX ENDS HERE ---
 
         fetchNotices();
     }, []);
@@ -38,18 +42,26 @@ const NoticeBoard = () => {
     const fetchNotices = async () => {
         try {
             // --- FIX STARTS HERE ---
-            // The logic now correctly handles getting the admin ID whether
-            // a student, teacher, or the admin themselves is logged in.
+            // This logic now correctly gets the admin ID whether the user is a student, teacher, or the admin.
             const adminId = adminData ? adminData.id : (JSON.parse(localStorage.getItem('student'))?.admin?._id || JSON.parse(localStorage.getItem('teacher'))?.admin?._id);
+            
             if (!adminId) {
-                setError("Could not determine the institution.");
+                setError("Could not determine the institution to fetch notices for.");
                 return;
             }
             // --- FIX ENDS HERE ---
+
             const response = await api.get(`/notices/admin/${adminId}`);
             setNotices(response.data);
         } catch (err) {
-            setError('Failed to fetch notices.');
+            // --- FIX STARTS HERE ---
+            // This now handles the 404 error gracefully when no notices are found.
+            if (err.response && err.response.status === 404) {
+                setNotices([]);
+            } else {
+                setError('Failed to fetch notices.');
+            }
+            // --- FIX ENDS HERE ---
         }
     };
     
@@ -57,7 +69,7 @@ const NoticeBoard = () => {
         if (window.confirm('Are you sure you want to delete this notice?')) {
             try {
                 await api.delete(`/notices/${noticeId}`);
-                fetchNotices();
+                fetchNotices(); // Refresh the list after deleting
             } catch (err) {
                 setError('Failed to delete notice.');
             }

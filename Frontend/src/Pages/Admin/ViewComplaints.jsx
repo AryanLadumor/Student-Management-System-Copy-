@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import './ViewComplaints.css';
 import './Modal.css';
@@ -10,21 +11,22 @@ const ViewComplaints = () => {
     const [currentComplain, setCurrentComplain] = useState(null);
     const [response, setResponse] = useState('');
     const [status, setStatus] = useState('');
+    const navigate = useNavigate();
 
     // --- FIX STARTS HERE ---
-    // The component was using studentData instead of adminData
+    // The component was incorrectly trying to get the admin ID from student data.
+    // This now correctly gets the admin data from local storage.
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const adminId = adminData ? adminData.id : null;
 
     useEffect(() => {
         if (!adminId) {
-            setError("Admin not found, please log in again.");
-            // You might want to add a redirect here as well
-            // navigate('/admin/login');
+            // If no admin is logged in, redirect to the login page.
+            navigate('/admin/login');
             return;
         }
         fetchComplaints();
-    }, [adminId]);
+    }, [adminId, navigate]);
     // --- FIX ENDS HERE ---
 
     const fetchComplaints = async () => {
@@ -32,7 +34,11 @@ const ViewComplaints = () => {
             const res = await api.get(`/complain/admin/${adminId}`);
             setComplaints(res.data);
         } catch (err) {
-            setError('Failed to fetch complaints.');
+            if (err.response && err.response.status === 404) {
+                setComplaints([]); // Handle case where no complaints are found
+            } else {
+                setError('Failed to fetch complaints.');
+            }
         }
     };
 

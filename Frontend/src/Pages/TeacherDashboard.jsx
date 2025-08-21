@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Your CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faSignOutAlt, faChalkboardUser, faBullhorn} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faSignOutAlt, faChalkboardUser, faBullhorn,faClipboardList} from '@fortawesome/free-solid-svg-icons';
 
 const TeacherDashboard = () => {
     const [teacher, setTeacher] = useState(null);
@@ -29,6 +29,7 @@ const TeacherDashboard = () => {
         { icon: <FontAwesomeIcon icon={faChalkboardUser} />, name: 'My Classes', path: '/teacher/classes' },
         { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Notice Board', path: '/teacher/notices' },
         { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile', path: '/teacher/profile' },
+        { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/teacher/students/marks' },
     ];
     
     if (!teacher) {

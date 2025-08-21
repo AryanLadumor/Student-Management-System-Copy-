@@ -27,7 +27,9 @@ import CreateComplain from './Pages/Student/CreateComplain';
 import ViewComplaints from './Pages/Admin/ViewComplaints';
 import StudentViewComplaints from './Pages/Student/ViewComplaints';
 import StudentSubjects from './Pages/Student/StudentSubjects';
+import StudentExamResults from './Pages/Student/StudentExamResults';
 import NoticeBoard from './Pages/NoticeBoard';
+import ViewStudentMarks from './Pages/ViewStudentMarks';
 
 function App() {
   return (
@@ -36,8 +38,8 @@ function App() {
             {/* <div className="App"> */}
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
-                   
                     <Route path="/select-role" element={<SelectRolePage />} />
+                   
                    
                     <Route path="/student" element={<StudentDashboard />} />
                     <Route path="/student/profile" element={<StudentProfile />} />
@@ -46,9 +48,8 @@ function App() {
                     <Route path="/student/complain" element={<CreateComplain />} />
                     <Route path="/student/my-complaints" element={<StudentViewComplaints />} />
                     <Route path="/student/subjects" element={<StudentSubjects />} />
-
-                  <Route path="/student/notices" element={<NoticeBoard />} />
-                    <Route path="/teacher/notices" element={<NoticeBoard />} />
+                    <Route path="/student/results" element={<StudentExamResults />} />
+                    <Route path="/student/notices" element={<NoticeBoard />} />
 
                     <Route path="/teacher" element={<TeacherDashboard />} />
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
@@ -56,17 +57,22 @@ function App() {
                     <Route path="/teacher/class/:classId/subject/:subjectId" element={<ClassStudents />} />
                     <Route path="/teacher/profile" element={<TeacherProfile />} />
                     <Route path="/teacher/classes" element={<MyClasses />} />
+                    <Route path="/teacher/notices" element={<NoticeBoard />} />
+                    <Route path="/teacher/students/marks" element={<ViewStudentMarks />} />
+
+                    
 
                     <Route path="/hod" element={<HodDashboard />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin/register" element={<AdminRegister />} />
                    
-                    <Route path="/admin/notices" element={<NoticeBoard />} />
                     <Route path="/admin/classes" element={<ViewClasses />} />
                     <Route path="/admin/students" element={<ViewStudents />} /> 
+                      <Route path="/admin/students/marks" element={<ViewStudentMarks />} />
                     <Route path="/admin/teachers" element={<ViewTeachers />} /> 
                     <Route path="/admin/subjects" element={<ViewSubjects />} />
                     <Route path="/admin/complaints" element={<ViewComplaints />} />
+                    <Route path="/admin/notices" element={<NoticeBoard />} />
                     <Route path="/logout" element={<Logout />} />
 
 
