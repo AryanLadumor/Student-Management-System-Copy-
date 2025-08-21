@@ -68,7 +68,7 @@ const TeacherDashboard = () => {
                 <header className="header">
                     <h2 className="header-title">Dashboard</h2>
                     <div className="header-actions">
-                        <span>Welcome, {teacher.name}!</span>
+                        <strong style={{marginRight:"1rem"}}>Welcome, {teacher.name}!</strong>
                     </div>
                 </header>
 
