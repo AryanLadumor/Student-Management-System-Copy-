@@ -6,53 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays, faArrowLeft, faFilePdf, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { generatePDF, generateAbsenteesPDF } from '../../utils/pdfGenerator';
 
-const SkeletonLoader = () => (
-    <div className="view-attendance-container skeleton-loading">
-        <div className="view-attendance-header">
-            <div className="skeleton skeleton-title"></div>
-            <div className="skeleton skeleton-button"></div>
-        </div>
-
-        <div className="attendance-filters">
-            <div className="skeleton skeleton-filter"></div>
-            <div className="skeleton skeleton-filter"></div>
-            <div className="skeleton skeleton-filter"></div>
-            <div className="skeleton skeleton-button-small"></div>
-            <div className="skeleton skeleton-button-large"></div>
-            <div className="skeleton skeleton-button-large"></div>
-        </div>
-
-        <div className="attendance-table-container">
-            <table className="attendance-table-view">
-                <thead>
-                    <tr>
-                        {[...Array(6)].map((_, i) => <th key={i}><div className="skeleton skeleton-text"></div></th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {[...Array(8)].map((_, i) => (
-                        <tr key={i}>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                            <td><div className="skeleton skeleton-text"></div></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    </div>
-);
-
-
 const ViewAttendance = ({ userRole }) => {
     const [records, setRecords] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [initialLoad, setInitialLoad] = useState(true);
+    const [isInitialView, setIsInitialView] = useState(true); // Track if filters have been used
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const observer = useRef();
@@ -69,10 +28,12 @@ const ViewAttendance = ({ userRole }) => {
         return data ? JSON.parse(data) : null;
     }, [userRole]);
 
-    const fetchData = useCallback(async (pageNum, isNewFilter) => {
+    const fetchData = useCallback(async (pageNum, isNewFilter = false) => {
         if (!userData) return;
         setLoading(true);
-        if (isNewFilter) setInitialLoad(true);
+        if (isNewFilter) {
+            setRecords([]); // Clear old records on new filter
+        }
 
         try {
             const userId = userRole === 'admin' ? userData.id : userData._id;
@@ -91,43 +52,50 @@ const ViewAttendance = ({ userRole }) => {
             if (pageNum === 1) setRecords([]);
         } finally {
             setLoading(false);
-            if (isNewFilter) setInitialLoad(false);
         }
     }, [userRole, userData, selectedClass, selectedSubject, selectedDate]);
-
-     useEffect(() => {
+    
+    useEffect(() => {
         if (!userData) {
             navigate('/select-role');
             return;
         }
 
         const fetchFilterData = async () => {
-            const adminId = userRole === 'admin' ? userData.id : userData.admin._id;
-            const [classesRes, subjectsRes] = await Promise.all([
-                api.get(`/class/${adminId}`),
-                api.get(`/subjects/admin/${adminId}`)
-            ]);
-            setAllClasses(classesRes.data);
-            setAllSubjects(subjectsRes.data);
+            try {
+                const adminId = userRole === 'admin' ? userData.id : userData.admin._id;
+                const [classesRes, subjectsRes] = await Promise.all([
+                    api.get(`/class/${adminId}`),
+                    api.get(`/subjects/admin/${adminId}`)
+                ]);
+                setAllClasses(classesRes.data);
+                setAllSubjects(subjectsRes.data);
+            } catch (filterError) {
+                setError("Could not load filter options.");
+            }
         };
         
         fetchFilterData();
-        fetchData(1, true);
     }, [userRole, userData, navigate]);
 
 
     useEffect(() => {
-        // Refetch when filters change
-        setPage(1);
-        setRecords([]);
+        const filtersAreEmpty = !selectedClass && !selectedSubject && !selectedDate;
+        if (filtersAreEmpty) {
+            setIsInitialView(true);
+            setRecords([]);
+            return;
+        }
+        setIsInitialView(false);
+        setPage(1); // Reset page for new filter
         fetchData(1, true);
-    }, [selectedClass, selectedSubject, selectedDate, fetchData]);
+    }, [selectedClass, selectedSubject, selectedDate]);
 
     useEffect(() => {
-        if (page > 1) {
+        if (page > 1 && !isInitialView) {
             fetchData(page, false);
         }
-    }, [page, fetchData]);
+    }, [page, isInitialView, fetchData]);
     
     const lastElementRef = useCallback(node => {
         if (loading) return;
@@ -142,10 +110,8 @@ const ViewAttendance = ({ userRole }) => {
     
     const dashboardPath = userRole === 'admin' ? '/hod' : '/teacher/dashboard';
 
-    const handleDownload = () => generatePDF(records); // Download all loaded records
+    const handleDownload = () => generatePDF(records);
     const handleDownloadAbsentees = () => generateAbsenteesPDF(records);
-
-    if (initialLoad) return <SkeletonLoader />;
 
     return (
         <div className="view-attendance-container">
@@ -167,11 +133,11 @@ const ViewAttendance = ({ userRole }) => {
                 </select>
                 <input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
                 <button onClick={() => {setSelectedClass(''); setSelectedSubject(''); setSelectedDate('');}}>Clear Filters</button>
-                 <button onClick={handleDownload} className="download-btn">
-                    <FontAwesomeIcon icon={faFilePdf} /> Download Full Report (PDF)
+                 <button onClick={handleDownload} className="download-btn" disabled={records.length === 0}>
+                    <FontAwesomeIcon icon={faFilePdf} /> Download Full Report
                 </button>
-                <button onClick={handleDownloadAbsentees} className="download-btn-absent">
-                    <FontAwesomeIcon icon={faFilePdf} /> Download Absentees Report (PDF)
+                <button onClick={handleDownloadAbsentees} className="download-btn-absent" disabled={records.length === 0}>
+                    <FontAwesomeIcon icon={faFilePdf} /> Download Absentees Report
                 </button>
             </div>
 
@@ -188,7 +154,19 @@ const ViewAttendance = ({ userRole }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {records.length > 0 ? (
+                        {isInitialView ? (
+                            <tr>
+                                <td colSpan="6" className="initial-prompt">
+                                    Please select a class, subject, or date to view attendance records.
+                                </td>
+                            </tr>
+                        ) : loading && records.length === 0 ? (
+                            <tr>
+                                <td colSpan="6" className="initial-prompt">
+                                    <FontAwesomeIcon icon={faSpinner} spin /> Fetching data...
+                                </td>
+                            </tr>
+                        ) : records.length > 0 ? (
                             records.map((record, index) => (
                                 <tr ref={records.length === index + 1 ? lastElementRef : null} key={record._id}>
                                     <td>{new Date(record.date).toLocaleDateString()}</td>
@@ -205,14 +183,14 @@ const ViewAttendance = ({ userRole }) => {
                             ))
                         ) : (
                              <tr>
-                                <td colSpan="6">
-                                    {error ? error : "No attendance records found for the selected filters."}
+                                <td colSpan="6" className="initial-prompt">
+                                    {error ? error : "No records found for the selected filters."}
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
-                 {loading && !initialLoad && <div className="loading-more"><FontAwesomeIcon icon={faSpinner} spin /> Loading more...</div>}
+                 {loading && !isInitialView && <div className="loading-more"><FontAwesomeIcon icon={faSpinner} spin /> Loading more...</div>}
                  {!hasMore && records.length > 0 && <div className="end-of-records">End of records</div>}
             </div>
         </div>
