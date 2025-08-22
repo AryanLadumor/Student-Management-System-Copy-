@@ -1,0 +1,114 @@
+.view-attendance-container {
+    padding: 2rem;
+    background-color: #f9fafb;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.view-attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.view-attendance-header h1 {
+    font-size: 2.25rem;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.back-link-attendance {
+    background-color: #6c757d;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.back-link-attendance:hover {
+    background-color: #5a6268;
+}
+
+.attendance-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.attendance-filters select,
+.attendance-filters input,
+.attendance-filters button {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+.attendance-filters button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.attendance-filters button:hover {
+    background-color: #dc2626;
+}
+
+.attendance-table-container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+
+.attendance-table-view {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table-view th,
+.attendance-table-view td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.attendance-table-view th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+.attendance-table-view tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+.status-badge {
+    padding: 0.3em 0.8em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 20px;
+    color: white;
+    text-transform: capitalize;
+}
+
+.status-badge.present {
+    background-color: #10b981;
+}
+
+.status-badge.absent {
+    background-color: #ef4444;
+}

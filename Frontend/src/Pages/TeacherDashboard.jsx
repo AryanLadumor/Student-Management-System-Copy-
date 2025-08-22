@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Dashboard.css'; // Your CSS file
+import './Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faSignOutAlt, faChalkboardUser, faBullhorn,faClipboardList} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faSignOutAlt, faChalkboardUser, faBullhorn, faClipboardList, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 
 const TeacherDashboard = () => {
     const [teacher, setTeacher] = useState(null);
@@ -13,7 +13,6 @@ const TeacherDashboard = () => {
         if (storedTeacher) {
             setTeacher(JSON.parse(storedTeacher));
         } else {
-            // If no teacher data, redirect to login
             navigate('/teacher/login');
         }
     }, [navigate]);
@@ -27,18 +26,18 @@ const TeacherDashboard = () => {
     const navItems = [
         { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard', path: '/teacher/dashboard' },
         { icon: <FontAwesomeIcon icon={faChalkboardUser} />, name: 'My Classes', path: '/teacher/classes' },
+        { icon: <FontAwesomeIcon icon={faCalendarDays} />, name: 'View Attendance', path: '/teacher/attendance' },
         { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Notice Board', path: '/teacher/notices' },
         { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile', path: '/teacher/profile' },
         { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/teacher/students/marks' },
     ];
     
     if (!teacher) {
-        return <div>Loading...</div>; // Or a proper loader component
+        return <div>Loading...</div>;
     }
 
     return (
         <div className="dashboard-container">
-            {/* Sidebar */}
             <aside className="sidebar">
                 <div className="sidebar-header">
                     <h1 className="logo">Teacher Panel</h1>
@@ -62,22 +61,18 @@ const TeacherDashboard = () => {
                     </ul>
                 </nav>
             </aside>
-
-            {/* Main Content */}
             <main className="main-content">
                 <header className="header">
                     <h2 className="header-title">Dashboard</h2>
                     <div className="header-actions">
-                        <strong style={{marginRight:"1rem"}}>Welcome, {teacher.name}!</strong>
+                        <span>Welcome, {teacher.name}!</span>
                     </div>
                 </header>
-
                 <div className="content-area">
                     <section className="hero-section">
                         <h1>Your Assigned Classes & Subjects</h1>
                         <p>Select a class to manage attendance and marks.</p>
                     </section>
-                    
                     <div className="bottom-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
                         {teacher.teaches && teacher.teaches.length > 0 ? (
                             teacher.teaches.map(item => (
