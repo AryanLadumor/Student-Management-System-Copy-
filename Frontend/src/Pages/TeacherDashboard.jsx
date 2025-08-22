@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Dashboard.css';
+import './TeacherDashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser, faSignOutAlt, faChalkboardUser, faBullhorn, faClipboardList, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,7 +25,7 @@ const TeacherDashboard = () => {
 
     const navItems = [
         { icon: <FontAwesomeIcon icon={faHome} />, name: 'Dashboard', path: '/teacher/dashboard' },
-        { icon: <FontAwesomeIcon icon={faChalkboardUser} />, name: 'My Classes', path: '/teacher/classes' },
+        
         { icon: <FontAwesomeIcon icon={faCalendarDays} />, name: 'View Attendance', path: '/teacher/attendance' },
         { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Notice Board', path: '/teacher/notices' },
         { icon: <FontAwesomeIcon icon={faUser} />, name: 'Profile', path: '/teacher/profile' },
@@ -83,11 +83,21 @@ const TeacherDashboard = () => {
                                     </div>
                                     <Link 
                                         to={`/teacher/class/${item.class._id}/subject/${item.subject._id}`}
-                                        className="add-button" 
-                                        style={{marginTop: '1rem', textDecoration: 'none', textAlign: 'center'}}
-                                    >
+                                        className="manage-button"
+                                        style={{
+                                            marginTop: "1rem",
+                                            textDecoration: "none",
+                                            textAlign: "center",
+                                            display: "inline-block",
+                                            padding: "10px 15px",
+                                            backgroundColor: "#333",  // light black
+                                            color: "#fff",
+                                            borderRadius: "6px",
+                                        }}
+                                        >
                                         Manage Students
-                                    </Link>
+                                        </Link>
+
                                 </div>
                             ))
                         ) : (

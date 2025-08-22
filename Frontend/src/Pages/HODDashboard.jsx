@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import './HODDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome,

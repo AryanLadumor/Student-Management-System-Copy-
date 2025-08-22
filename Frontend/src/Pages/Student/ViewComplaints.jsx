@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import './ViewComplaints.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 const ViewComplaints = () => {
     const [complaints, setComplaints] = useState([]);
@@ -40,10 +42,14 @@ const ViewComplaints = () => {
 
     return (
         <div className="student-complaints-container">
+            {/* Header with Back Button */}
             <div className="student-complaints-header">
-                <h1>My Complaints</h1>
+                <Link to="/student" className="back-button">
+                    <FontAwesomeIcon icon={faArrowLeft} /> Back
+                </Link>
+                <h1><FontAwesomeIcon icon={faExclamationCircle} /> My Complaints</h1>
                 <Link to="/student/complain" className="new-complain-btn">
-                    File a New Complaint
+                    File New Complaint
                 </Link>
             </div>
 

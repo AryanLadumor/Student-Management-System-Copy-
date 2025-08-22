@@ -1,14 +1,13 @@
+
 /* ==========================================================================
-   1. Global Styles & Variables (Visible Layered Theme)
+   1. Global Styles & Variables
    ========================================================================== */
 
 :root {
     --primary-color: #4f46e5;
     --primary-hover: #4338ca;
     --content-bg: #f1f5f9;
-    /* A distinct off-white/light gray background */
     --card-bg: #ffffff;
-    /* Pure white for cards & sidebar to make them pop */
     --hover-bg: #e2e8f0;
     --text-primary: #000000;
     --text-secondary: #555555;
@@ -24,13 +23,12 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    
 }
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #cac6c6;
+    background-color: #e8e6e6;
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -46,24 +44,18 @@ ul {
 }
 
 /* ==========================================================================
-   2. Main Layout
+   2. Main Layout & Sidebar
    ========================================================================== */
 
 .dashboard-container {
     display: flex;
     height: 100vh;
     width: 100%;
-    /* background-color: #000000; */
 }
-
-/* ==========================================================================
-   3. Sidebar
-   ========================================================================== */
 
 .sidebar {
     width: 260px;
     background-color: var(--card-bg);
-    /* Changed to pure white */
     color: var(--text-primary);
     padding: 1.5rem;
     display: flex;
@@ -78,39 +70,6 @@ ul {
     color: var(--text-primary);
     margin-bottom: 2rem;
     text-align: center;
-}
-
-.search-container {
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-}
-
-.search-input {
-    width: 100%;
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    background-color: var(--content-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    transition: border-color var(--transition-speed);
-}
-
-.search-input::placeholder {
-    color: var(--text-secondary);
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
 }
 
 .sidebar-nav ul {
@@ -153,15 +112,13 @@ ul {
 }
 
 /* ==========================================================================
-   4. Main Content
+   3. Main Content
    ========================================================================== */
 
 .main-content {
     flex: 1;
     overflow-y: auto;
-    /* padding: 2rem; */
     background-color: #e8e6e6;
-    /* Changed to off-white */
 }
 
 .header {
@@ -171,16 +128,15 @@ ul {
     margin-bottom: 2rem;
     background-color: var(--card-bg);
     height: 4.5rem;
-        /* padding: 0 2rem; */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-       
-        margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .header-title {
     font-size: 1.8rem;
     font-weight: 700;
-    margin-left: 1rem;
 }
 
 .header-actions {
@@ -193,32 +149,19 @@ ul {
     color: var(--text-secondary);
     font-weight: 500;
     transition: color var(--transition-speed);
-    margin-right: 1rem;
 }
 
 .header-actions a:hover {
     color: var(--primary-color);
 }
 
-.header-actions button {
-    background-color: var(--text-primary);
-    color: #ffffff;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    border-radius: var(--border-radius);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color var(--transition-speed);
-}
-
-.header-actions button:hover {
-    background-color: #333;
-}
-
 /* ==========================================================================
-   5. Content Sections & Cards
+   4. Content Sections & Cards
    ========================================================================== */
+
+.content-area {
+    padding: 2rem;
+}
 
 .hero-section {
     background: var(--text-primary);
@@ -261,32 +204,17 @@ ul {
 
 .bottom-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
-.info-card,
-.data-table-card {
-    background-color: var(--card-bg);
-    /* Changed to pure white */
+.info-card {
+    background-color: aqua;
     padding: 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
 }
 
-.info-card {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.info-card img {
-    width: 80px;
-    height: 80px;
-}
-
-.info-card h3,
-.data-table-card h3 {
+.info-card h3 {
     margin-bottom: 1rem;
     font-size: 1.25rem;
 }
@@ -296,32 +224,8 @@ ul {
     line-height: 1.6;
 }
 
-.data-table-card table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table-card td {
-    padding: 1rem 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.data-table-card tr:last-child td {
-    border-bottom: none;
-}
-
-.data-table-card td:first-child {
-    color: var(--text-secondary);
-}
-
-.data-table-card td:last-child {
-    font-weight: 600;
-    text-align: right;
-    font-size: 1.1rem;
-}
-
 /* ==========================================================================
-   6. Responsive Design
+   5. Responsive Design
    ========================================================================== */
 @media (max-width: 768px) {
     .dashboard-container {
@@ -335,6 +239,8 @@ ul {
         align-items: center;
         padding: 1rem;
         justify-content: space-between;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .sidebar-header .logo {
@@ -356,4 +262,25 @@ ul {
         align-items: flex-start;
         gap: 1rem;
     }
+}
+/* TeacherDashboard specific styles */
+
+.teacher-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.manage-button {
+    margin-top: 1rem;
+    text-decoration: none;
+    text-align: center;
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: background-color var(--transition-speed);
+}
+
+.manage-button:hover {
+    background-color: var(--primary-hover);
 }

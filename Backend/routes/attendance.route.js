@@ -16,5 +16,6 @@ router.route('/student/:studentId').get(getAttendance); // For a student's own v
 router.route('/admin/:adminId').get(getAdminAttendance); // For the admin's view
 router.route('/teacher/:teacherId').get(getTeacherAttendance); // For the teacher's view
 
+
 const AttendanceRouter = router;
 export default AttendanceRouter;

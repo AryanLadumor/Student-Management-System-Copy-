@@ -60,11 +60,7 @@ def get_at_risk_students_data(threshold: float = 60.0):
     at_risk_df = get_at_risk_students(performance_df, threshold)
     return at_risk_df.to_dict(orient='records')
 
-# --- Attendance Analysis Endpoint ---
-@app.get("/attendance-performance")
-def get_attendance_vs_performance():
-    """Returns data for correlating attendance with performance."""
-    return get_attendance_performance_data()
+
 
 # --- Class and Teacher Analysis Endpoints ---
 @app.get("/class-performance")

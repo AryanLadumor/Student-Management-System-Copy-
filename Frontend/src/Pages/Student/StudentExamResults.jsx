@@ -40,11 +40,13 @@ const StudentExamResults = () => {
 
     return (
         <div className="exam-results-container">
+            
+            <button className="back-button" onClick={() => navigate('/student')}>
+                <FontAwesomeIcon icon={faArrowLeft} /> Back
+            </button>
+
             <div className="exam-results-header">
                 <h1><FontAwesomeIcon icon={faChartBar} /> My Exam Results</h1>
-                <Link to="/student" className="back-link">
-                    <FontAwesomeIcon icon={faArrowLeft} /> Back to Dashboard
-                </Link>
             </div>
             {error && <p className="error-message">{error}</p>}
             
