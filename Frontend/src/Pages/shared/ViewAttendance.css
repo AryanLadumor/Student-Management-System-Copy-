@@ -67,6 +67,22 @@
     background-color: #dc2626;
 }
 
+.download-btn {
+    background-color: #4f46e5 !important;
+}
+
+.download-btn:hover {
+    background-color: #4338ca !important;
+}
+
+.download-btn-absent {
+    background-color: #f59e0b !important;
+}
+
+.download-btn-absent:hover {
+    background-color: #d97706 !important;
+}
+
 .attendance-table-container {
     background-color: white;
     border-radius: 12px;
@@ -111,4 +127,55 @@
 
 .status-badge.absent {
     background-color: #ef4444;
+}
+
+/* --- Skeleton Loading Styles --- */
+.skeleton {
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.skeleton-title {
+    width: 300px;
+    height: 36px;
+}
+
+.skeleton-button {
+    width: 180px;
+    height: 48px;
+}
+
+.skeleton-filter {
+    width: 200px;
+    height: 42px;
+}
+
+.skeleton-button-small {
+    width: 120px;
+    height: 42px;
+}
+
+.skeleton-button-large {
+    width: 250px;
+    height: 42px;
+}
+
+.skeleton-text {
+    width: 80%;
+    height: 20px;
+    margin: 0;
+}
+
+.skeleton-loading .attendance-table-view tbody tr:hover {
+    background-color: transparent;
 }

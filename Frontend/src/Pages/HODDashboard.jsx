@@ -12,7 +12,8 @@ import {
   faExclamationCircle,
   faClipboardList,
   faChartPie,
-  faChalkboard
+  faChalkboard,
+  faCalendarCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { faBrain } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
@@ -34,6 +35,7 @@ const HodDashboard = () => {
         { icon: <FontAwesomeIcon icon={faBullhorn} />, name: 'Manage Notices', path: '/admin/notices' },
         { icon: <FontAwesomeIcon icon={faExclamationCircle} />, name: 'Complaints', path: '/admin/complaints' },
         { icon: <FontAwesomeIcon icon={faClipboardList} />, name: 'View Marks', path: '/admin/students/marks' },
+        { icon: <FontAwesomeIcon icon={faCalendarCheck} />, name: 'View Attendance', path: '/admin/attendance' },
         { icon: <FontAwesomeIcon icon={faChartPie} />, name: 'Student Analysis', path: '/admin/analysis' },
         { icon: <FontAwesomeIcon icon={faChalkboard} />, name: 'Class Insights', path: '/admin/class-analysis' },
         { icon: <FontAwesomeIcon icon={faBrain} />, name: 'Predictive Insights', path: '/admin/predictive-analysis' },

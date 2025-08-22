@@ -37,6 +37,7 @@ import AddMarks from './Pages/Teacher/AddMarks';
 import PerformanceAnalysis from './Pages/Admin/PerformanceAnalysis';
 import ClassAnalysis from './Pages/Admin/ClassAnalysis';
 import PredictiveAnalysis from './Pages/Admin/PredictiveAnalysis';
+import ViewAttendance from './Pages/shared/ViewAttendance';
 
 
 function App() {
@@ -70,6 +71,8 @@ function App() {
         <Route path="/teacher/classes" element={<MyClasses />} />
         <Route path="/teacher/notices" element={<NoticeBoard />} />
         <Route path="/teacher/students/marks" element={<ViewStudentMarks />} />
+        <Route path="/teacher/attendance" element={<ViewAttendance userRole="teacher" />} />
+
 
         {/* Admin/HOD Routes */}
         <Route path="/hod" element={<HodDashboard />} />
@@ -90,6 +93,7 @@ function App() {
         <Route path="/admin/analysis" element={<PerformanceAnalysis />} />
         <Route path="/admin/class-analysis" element={<ClassAnalysis />} />
         <Route path="/admin/predictive-analysis" element={<PredictiveAnalysis />} />  
+        <Route path="/admin/attendance" element={<ViewAttendance userRole="admin" />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>

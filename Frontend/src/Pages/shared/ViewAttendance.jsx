@@ -3,7 +3,49 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import './ViewAttendance.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faArrowLeft, faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { generatePDF, generateAbsenteesPDF } from '../../utils/pdfGenerator';
+
+const SkeletonLoader = () => (
+    <div className="view-attendance-container skeleton-loading">
+        <div className="view-attendance-header">
+            <div className="skeleton skeleton-title"></div>
+            <div className="skeleton skeleton-button"></div>
+        </div>
+
+        <div className="attendance-filters">
+            <div className="skeleton skeleton-filter"></div>
+            <div className="skeleton skeleton-filter"></div>
+            <div className="skeleton skeleton-filter"></div>
+            <div className="skeleton skeleton-button-small"></div>
+            <div className="skeleton skeleton-button-large"></div>
+            <div className="skeleton skeleton-button-large"></div>
+        </div>
+
+        <div className="attendance-table-container">
+            <table className="attendance-table-view">
+                <thead>
+                    <tr>
+                        {[...Array(6)].map((_, i) => <th key={i}><div className="skeleton skeleton-text"></div></th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {[...Array(8)].map((_, i) => (
+                        <tr key={i}>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                            <td><div className="skeleton skeleton-text"></div></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </div>
+);
+
 
 const ViewAttendance = ({ userRole }) => {
     const [records, setRecords] = useState([]);
@@ -26,7 +68,7 @@ const ViewAttendance = ({ userRole }) => {
 
         const fetchData = async () => {
             try {
-                setLoading(true);
+                // setLoading(true) is already set initially
                 const userId = userRole === 'admin' ? userData.id : userData._id;
                 const endpoint = `/attendance/${userRole}/${userId}`;
                 const res = await api.get(endpoint);
@@ -57,7 +99,15 @@ const ViewAttendance = ({ userRole }) => {
     
     const dashboardPath = userRole === 'admin' ? '/hod' : '/teacher/dashboard';
 
-    if (loading) return <div className="loading-container">Loading Attendance Data...</div>;
+    const handleDownload = () => {
+        generatePDF(filteredRecords);
+    };
+
+    const handleDownloadAbsentees = () => {
+        generateAbsenteesPDF(filteredRecords);
+    };
+
+    if (loading) return <SkeletonLoader />;
 
     return (
         <div className="view-attendance-container">
@@ -79,6 +129,12 @@ const ViewAttendance = ({ userRole }) => {
                 </select>
                 <input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} />
                 <button onClick={() => {setSelectedClass(''); setSelectedSubject(''); setSelectedDate('');}}>Clear Filters</button>
+                 <button onClick={handleDownload} className="download-btn">
+                    <FontAwesomeIcon icon={faFilePdf} /> Download Full Report (PDF)
+                </button>
+                <button onClick={handleDownloadAbsentees} className="download-btn-absent">
+                    <FontAwesomeIcon icon={faFilePdf} /> Download Absentees Report (PDF)
+                </button>
             </div>
 
             {error && records.length === 0 && <div className="error-container">{error}</div>}
