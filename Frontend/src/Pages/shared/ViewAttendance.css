@@ -179,3 +179,10 @@
 .skeleton-loading .attendance-table-view tbody tr:hover {
     background-color: transparent;
 }
+
+.loading-more, .end-of-records {
+    text-align: center;
+    padding: 1rem;
+    color: #6b7280;
+    font-style: italic;
+}

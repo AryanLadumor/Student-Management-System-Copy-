@@ -1,6 +1,8 @@
 import Student from '../models/student.model.js';
 import Teacher from '../models/teacher.model.js';
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
+
 
 // --- Existing Functions (markAttendance, getAttendance) remain the same ---
 
@@ -46,72 +48,100 @@ export const getAttendance = async (req, res) => {
 };
 
 
-// --- NEW FUNCTIONS START HERE ---
+// --- EFFICIENT FILTERING LOGIC ---
+const getFilteredAttendance = async (baseMatch, queryParams, page, limit) => {
+    const { classId, subjectId, date } = queryParams;
 
-// For Admin: Get all attendance records for the institution
+    const pipeline = [
+        { $match: baseMatch },
+        { $unwind: "$attendance" },
+    ];
+
+    const filterMatch = {};
+    if (classId) filterMatch.classname = new mongoose.Types.ObjectId(classId);
+    if (subjectId) filterMatch['attendance.subject'] = new mongoose.Types.ObjectId(subjectId);
+    if (date) {
+        const startDate = new Date(date);
+        const endDate = new Date(date);
+        endDate.setDate(endDate.getDate() + 1);
+        filterMatch['attendance.date'] = { $gte: startDate, $lt: endDate };
+    }
+
+    if (Object.keys(filterMatch).length > 0) {
+        pipeline.push({ $match: filterMatch });
+    }
+    
+    pipeline.push({ $sort: { 'attendance.date': -1 } });
+    
+    // Count total documents for pagination
+    const countPipeline = [...pipeline, { $count: 'total' }];
+    const totalResult = await Student.aggregate(countPipeline);
+    const totalRecords = totalResult.length > 0 ? totalResult[0].total : 0;
+
+    // Add pagination and lookups
+    pipeline.push({ $skip: (page - 1) * limit });
+    pipeline.push({ $limit: limit });
+    pipeline.push(
+        { $lookup: { from: 'classes', localField: 'classname', foreignField: '_id', as: 'classDetails' } },
+        { $lookup: { from: 'subjects', localField: 'attendance.subject', foreignField: '_id', as: 'subjectDetails' } },
+        { $unwind: '$classDetails' },
+        { $unwind: '$subjectDetails' },
+        {
+            $project: {
+                _id: '$attendance._id',
+                studentName: '$name',
+                rollNumber: '$rollnumber',
+                className: '$classDetails.classname',
+                subjectName: '$subjectDetails.subjectname',
+                date: '$attendance.date',
+                status: '$attendance.status',
+            }
+        }
+    );
+
+    const records = await Student.aggregate(pipeline);
+    const hasMore = totalRecords > page * limit;
+
+    return { records, hasMore };
+}
+
+
 export const getAdminAttendance = async (req, res) => {
     try {
         const { adminId } = req.params;
-        const students = await Student.find({ admin: adminId })
-            .populate('classname', 'classname')
-            .populate('attendance.subject', 'subjectname')
-            .select('name rollnumber classname attendance');
+        const page = parseInt(req.query.page) || 1;
+        const limit = 30; // Records per page
+        
+        const { records, hasMore } = await getFilteredAttendance(
+            { admin: new mongoose.Types.ObjectId(adminId) },
+            req.query, page, limit
+        );
 
-        if (!students) {
-            return res.status(httpStatus.NOT_FOUND).json({ msg: 'No students found for this admin.' });
-        }
-
-        // Flatten the data for easier consumption on the frontend
-        const attendanceRecords = students.flatMap(student =>
-            student.attendance.map(record => ({
-                studentName: student.name,
-                rollNumber: student.rollnumber,
-                className: student.classname.classname,
-                subjectName: record.subject ? record.subject.subjectname : 'N/A',
-                date: record.date,
-                status: record.status,
-                _id: record._id
-            }))
-        ).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by most recent date
-
-        res.status(httpStatus.OK).json(attendanceRecords);
+        res.status(httpStatus.OK).json({ records, hasMore });
     } catch (error) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: 'Server error', error: error.message });
     }
 };
 
-// For Teacher: Get attendance records for their specific classes/subjects
 export const getTeacherAttendance = async (req, res) => {
     try {
         const { teacherId } = req.params;
         const teacher = await Teacher.findById(teacherId).select('teaches');
-
         if (!teacher) {
             return res.status(httpStatus.NOT_FOUND).json({ msg: 'Teacher not found.' });
         }
-
+        
         const subjectIds = teacher.teaches.map(t => t.subject);
+        const page = parseInt(req.query.page) || 1;
+        const limit = 30; // Records per page
 
-        const students = await Student.find({ 'attendance.subject': { $in: subjectIds } })
-            .populate('classname', 'classname')
-            .populate('attendance.subject', 'subjectname')
-            .select('name rollnumber classname attendance');
+        const { records, hasMore } = await getFilteredAttendance(
+            { 'attendance.subject': { $in: subjectIds } },
+            req.query, page, limit
+        );
+        
+        res.status(httpStatus.OK).json({ records, hasMore });
 
-        const filteredRecords = students.flatMap(student =>
-            student.attendance
-                .filter(record => record.subject && subjectIds.some(subId => subId.equals(record.subject._id)))
-                .map(record => ({
-                    studentName: student.name,
-                    rollNumber: student.rollnumber,
-                    className: student.classname.classname,
-                    subjectName: record.subject.subjectname,
-                    date: record.date,
-                    status: record.status,
-                    _id: record._id
-                }))
-        ).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by most recent date
-
-        res.status(httpStatus.OK).json(filteredRecords);
     } catch (error) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ msg: 'Server error', error: error.message });
     }
