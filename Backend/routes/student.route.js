@@ -46,4 +46,3 @@ router.route("/:studentId/subjects/:subjectId/marks").put(updateSubjectMarksForS
 
 const StudentRouter = router;
 export default StudentRouter;
-  

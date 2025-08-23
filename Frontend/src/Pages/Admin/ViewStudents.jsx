@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/api';
 import './View.css';
 import './Modal.css'; // Import modal styles
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const ViewStudents = () => {
     const [students, setStudents] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const observer = useRef();
     
     // State for modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,29 +24,43 @@ const ViewStudents = () => {
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const adminId = adminData ? adminData.id : null;
 
-    useEffect(() => {
+    const fetchData = useCallback(async () => {
         if (!adminId) {
             setError("Admin details not found. Please log in again.");
             return;
         }
+        setLoading(true);
+        try {
+            // Fetch both students and classes at the same time
+            const [studentsRes, classesRes] = await Promise.all([
+                api.get(`/students/institute/${adminId}/?page=${page}`),
+                api.get(`/class/${adminId}`)
+            ]);
+            setStudents(prev => [...prev, ...studentsRes.data.students]);
+            setHasMore(studentsRes.data.hasMore);
+            setAllClasses(classesRes.data);
+        } catch (err) {
+            setError('Failed to fetch data.');
+            console.error("Error fetching data:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [adminId, page]);
 
-        const fetchData = async () => {
-            try {
-                // Fetch both students and classes at the same time
-                const [studentsRes, classesRes] = await Promise.all([
-                    api.get(`/students/institute/${adminId}/`),
-                    api.get(`/class/${adminId}`)
-                ]);
-                setStudents(studentsRes.data);
-                setAllClasses(classesRes.data);
-            } catch (err) {
-                setError('Failed to fetch data.');
-                console.error("Error fetching data:", err);
-            }
-        };
-
+    useEffect(() => {
         fetchData();
-    }, [adminId]);
+    }, [fetchData]);
+
+    const lastStudentElementRef = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore]);
     
     // (Your existing handleDelete function remains here)
     const handleDelete = async (studentId) => {
@@ -124,8 +144,8 @@ const ViewStudents = () => {
                     </thead>
                     <tbody>
                         {filteredStudents.length > 0 ? (
-                            filteredStudents.map((student) => (
-                                <tr key={student._id}>
+                            filteredStudents.map((student, index) => (
+                                <tr ref={filteredStudents.length === index + 1 ? lastStudentElementRef : null} key={student._id}>
                                     <td>{student.name}</td>
                                     <td>{student.rollnumber}</td>
                                     <td>{student.classname ? student.classname.classname : 'N/A'}</td>
@@ -142,6 +162,8 @@ const ViewStudents = () => {
                         )}
                     </tbody>
                 </table>
+                 {loading && <div className="loading-more"><FontAwesomeIcon icon={faSpinner} spin /> Loading more...</div>}
+                 {!hasMore && students.length > 0 && <div className="end-of-records">End of records</div>}
             </div>
 
             {/* --- NEW MODAL JSX --- */}

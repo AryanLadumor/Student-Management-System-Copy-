@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import api from '../api/api';
 import './ViewStudentMarks.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faTimes, faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTimes, faEdit, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const ViewStudentMarks = () => {
-    const [students, setStudents] = useState([]);
+    const [allStudents, setAllStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [classes, setClasses] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const observer = useRef();
 
     const [editingStudentId, setEditingStudentId] = useState(null);
     const [editableMarks, setEditableMarks] = useState([]);
@@ -20,33 +25,39 @@ const ViewStudentMarks = () => {
     const adminData = JSON.parse(localStorage.getItem('admin'));
     const teacherData = JSON.parse(localStorage.getItem('teacher'));
 
+    const fetchData = useCallback(async (pageNum) => {
+        const user = adminData || teacherData;
+        const adminId = adminData ? adminData.id : teacherData.admin._id;
+        setLoading(true);
+        try {
+            const [studentsRes, classesRes] = await Promise.all([
+                api.get(`/students/admin/${adminId}/results?page=${pageNum}`),
+                api.get(`/class/${adminId}`)
+            ]);
+            
+            setAllStudents(prev => [...prev, ...studentsRes.data.students]);
+            setFilteredStudents(prev => [...prev, ...studentsRes.data.students]);
+            setHasMore(studentsRes.data.hasMore);
+            setClasses(classesRes.data);
+
+        } catch (err) {
+            setError('Failed to fetch student data.');
+        } finally {
+            setLoading(false);
+        }
+    }, [adminData, teacherData]);
+
     useEffect(() => {
         const user = adminData || teacherData;
         if (!user) {
             navigate('/select-role');
             return;
         }
-        fetchData();
+        fetchData(1);
     }, []);
 
-    const fetchData = async () => {
-        const user = adminData || teacherData;
-        const adminId = adminData ? adminData.id : teacherData.admin._id;
-        try {
-            const [studentsRes, classesRes] = await Promise.all([
-                api.get(`/students/admin/${adminId}/results`),
-                api.get(`/class/${adminId}`)
-            ]);
-            setStudents(studentsRes.data);
-            setFilteredStudents(studentsRes.data);
-            setClasses(classesRes.data);
-        } catch (err) {
-            setError('Failed to fetch student data.');
-        }
-    };
-
     useEffect(() => {
-        let filtered = students;
+        let filtered = allStudents;
 
         if (selectedClass) {
             filtered = filtered.filter(student => student.classname._id === selectedClass);
@@ -60,11 +71,27 @@ const ViewStudentMarks = () => {
         }
 
         setFilteredStudents(filtered);
-    }, [selectedClass, searchTerm, students]);
+    }, [selectedClass, searchTerm, allStudents]);
+
+    const lastStudentElementRef = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore]);
+    
+    useEffect(() => {
+        if (page > 1) {
+            fetchData(page);
+        }
+    }, [page, fetchData]);
 
     const handleEditClick = (student) => {
         setEditingStudentId(student._id);
-        // Deep copy the exam results to avoid direct state mutation
         setEditableMarks(JSON.parse(JSON.stringify(student.examResult)));
     };
 
@@ -94,7 +121,15 @@ const ViewStudentMarks = () => {
             }));
             await api.put(`/students/${studentId}/results`, { examResults: finalMarks });
             setEditingStudentId(null);
-            fetchData(); // Refresh data after saving
+            // Instead of refetching all data, just update the local state
+            const updatedStudents = allStudents.map(s => {
+                if (s._id === studentId) {
+                    return { ...s, examResult: finalMarks };
+                }
+                return s;
+            });
+            setAllStudents(updatedStudents);
+
         } catch (err) {
             setError('Failed to update marks.');
         }
@@ -102,7 +137,7 @@ const ViewStudentMarks = () => {
 
     const getMarksForTest = (results, subjectName, examType) => {
         const result = results.find(r => r.subject.subjectname === subjectName && r.examType === examType);
-        return result || { marks: 0, _id: `${subjectName}-${examType}-${Math.random()}` }; // Ensure a unique key for new entries
+        return result || { marks: 0, _id: `${subjectName}-${examType}-${Math.random()}` };
     };
 
     return (
@@ -127,8 +162,8 @@ const ViewStudentMarks = () => {
             </div>
             {error && <p className="error-message">{error}</p>}
             <div className="student-cards-container">
-                {filteredStudents.map(student => (
-                    <div key={student._id} className="student-card">
+                {filteredStudents.map((student, index) => (
+                    <div ref={filteredStudents.length === index + 1 ? lastStudentElementRef : null} key={student._id} className="student-card">
                         <div className="student-card-header">
                             <div>
                                 <h3>{student.name}</h3>
@@ -183,6 +218,8 @@ const ViewStudentMarks = () => {
                     </div>
                 ))}
             </div>
+            {loading && <div className="loading-more"><FontAwesomeIcon icon={faSpinner} spin /> Loading more students...</div>}
+            {!hasMore && <div className="end-of-records">You've reached the end of the list.</div>}
         </div>
     );
 };

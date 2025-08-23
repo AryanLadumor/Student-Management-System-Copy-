@@ -106,7 +106,7 @@ const NoticeBoard = () => {
         } else if (teacherData) {
             navigate('/teacher');
         } else if (adminData) {
-            navigate('/admin');
+            navigate('/hod');
         } else {
             navigate('/select-role');
         }

@@ -19,11 +19,11 @@ def train_prediction_model():
     for subject in subjects:
         subject_cols = [col for col in df.columns if subject in col]
         
-        # Ensure we have all four test columns for the subject
+        
         t1_col, t2_col, t3_col, t4_col = f'{subject} T1', f'{subject} T2', f'{subject} T3', f'{subject} T4'
         if all(c in df.columns for c in [t1_col, t2_col, t3_col, t4_col]):
             
-            # Features: T1 and T2 marks
+            
             X = df[[t1_col, t2_col]]
             
             # Target: Average of T3 and T4 marks

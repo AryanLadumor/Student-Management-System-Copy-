@@ -97,18 +97,26 @@ const loginStudent = async (req, res) => {
 };
 
 const getAllStudents = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const students = await Student.find({ admin: id }).populate(
-      "classname",
-      "classname"
-    );
-    res
-      .status(200)
-      .json(students.map((s) => ({ ...s._doc, password: undefined })));
-  } catch (err) {
-    res.status(500).json({ msg: "Server error", error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const page = parseInt(req.query.page) || 1;
+        const limit = 15; // Number of students per page
+
+        const students = await Student.find({ admin: id })
+            .populate('classname', 'classname')
+            .limit(limit)
+            .skip((page - 1) * limit);
+            
+        const totalStudents = await Student.countDocuments({ admin: id });
+        const hasMore = (page * limit) < totalStudents;
+
+        res.status(200).json({
+            students: students.map(s => ({ ...s._doc, password: undefined })),
+            hasMore
+        });
+    } catch (err) {
+        res.status(500).json({ msg: 'Server error', error: err.message });
+    }
 };
 
 const getStudentsByClass = async (req, res) => {

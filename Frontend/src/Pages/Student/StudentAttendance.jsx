@@ -29,7 +29,7 @@ const StudentAttendance = () => {
 
         const fetchAttendance = async () => {
             try {
-                const response = await api.get(`/attendance/${studentData._id}`);
+                const response = await api.get(`/attendance/student/${studentData._id}`);
                 setAttendance(response.data);
             } catch (err) {
                 setError('Failed to fetch attendance records.');
